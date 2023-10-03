@@ -22,6 +22,7 @@ public class Main {
                 case 1:
                     System.out.println("Numero de peliculas: ");
                     int numero=sc.nextInt();
+                    sc.nextLine();
                     for (int i=0; i<=numero; i++) {
                         InsertarObjeto(leerDatosTeclado());
                     }
@@ -50,6 +51,7 @@ public class Main {
 
 
     public static Peliculas leerDatosTeclado(){
+
         DateTimeFormatter formatter=DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Peliculas pelicula=new Peliculas();
         System.out.println("Introduce el titulo: ");
@@ -148,7 +150,6 @@ public class Main {
             if (!encontrada) {
                 System.out.println("Película no encontrada.");
             } else {
-                // Actualizar el archivo sin la película eliminada
                 try {
                     FileOutputStream fileout = new FileOutputStream("src/main/resources/peliculas.dat");
                     ObjectOutputStream objectout = new ObjectOutputStream(fileout);
