@@ -8,6 +8,7 @@ import java.util.*;
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
+    static List <Peliculas> peliculaas =new ArrayList<>();
     static Scanner sc =new Scanner(System.in);
     public static void main(String[] args) throws IOException {
         //Peliculas pelicula=leerDatosTeclado();
@@ -20,12 +21,10 @@ public class Main {
 
             switch (opcion) {
                 case 1:
-                    System.out.println("Numero de peliculas: ");
-                    int numero=sc.nextInt();
-                    sc.nextLine();
-                    for (int i=0; i<=numero; i++) {
-                        InsertarObjeto(leerDatosTeclado());
-                    }
+                    Peliculas pelicula=leerDatosTeclado();
+                    peliculaas=LeerPeliculasFichero();
+                    InsertarObjeto(pelicula);
+
                     break;
                 case 2:
                     ModificarPelicula();
