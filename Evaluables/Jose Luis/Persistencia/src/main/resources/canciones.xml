@@ -1,0 +1,33 @@
+<canciones>
+  <cancion>
+    <numero>1</numero>
+    <nombre>Porcelain</nombre>
+    <autor>Moby</autor>
+    <duracion>5</duracion>
+    <anyo>2000</anyo>
+    <single>false</single>
+    <discografica>
+      <nombre>MTV</nombre>
+      <cif>1234</cif>
+      <direccion>America</direccion>
+      <presupuesto>200000.0</presupuesto>
+    </discografica>
+    <paises>España</paises>
+    <paises>Francia</paises>
+    <paises>Portugal</paises>
+  </cancion>
+  <cancion>
+    <numero>1</numero>
+    <nombre>nombre</nombre>
+    <autor>David</autor>
+    <duracion>5</duracion>
+    <anyo>2000</anyo>
+    <single>false</single>
+    <discografica>
+      <nombre>VTM</nombre>
+      <cif>4321</cif>
+      <direccion>Espanya</direccion>
+      <presupuesto>200000.0</presupuesto>
+    </discografica>
+  </cancion>
+</canciones>

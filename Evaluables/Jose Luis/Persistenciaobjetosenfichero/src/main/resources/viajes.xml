@@ -1,0 +1,74 @@
+<list>
+  <viaje>
+    <fechaSalida>2023-10-04</fechaSalida>
+    <fechaLlegada>2023-10-04</fechaLlegada>
+    <estapas>
+      <destino>
+        <ciudad>Madrid</ciudad>
+        <pais>España</pais>
+      </destino>
+      <hotel>
+        <nombre>Melia</nombre>
+        <direccion>Madrid</direccion>
+        <precio>34.5</precio>
+      </hotel>
+      <numNoches>2</numNoches>
+      <puntosVisita>Museo del Padro</puntosVisita>
+      <puntosVisita>Santiago Bernabeu</puntosVisita>
+    </estapas>
+    <estapas>
+      <destino>
+        <ciudad>Alicante</ciudad>
+        <pais>España</pais>
+      </destino>
+      <hotel>
+        <nombre>Continental</nombre>
+        <direccion>Benidorm</direccion>
+        <precio>50.0</precio>
+      </hotel>
+      <numNoches>3</numNoches>
+      <puntosVisita>Balcon del Mediterraneo</puntosVisita>
+      <puntosVisita>Aqualandia</puntosVisita>
+    </estapas>
+    <salida>
+      <ciudad>Crevillent</ciudad>
+      <pais>España</pais>
+    </salida>
+  </viaje>
+  <viaje>
+    <fechaSalida>2023-10-04</fechaSalida>
+    <fechaLlegada>2023-10-04</fechaLlegada>
+    <estapas>
+      <destino>
+        <ciudad>Alicante</ciudad>
+        <pais>España</pais>
+      </destino>
+      <hotel>
+        <nombre>Ibis</nombre>
+        <direccion>Alicante</direccion>
+        <precio>20.0</precio>
+      </hotel>
+      <numNoches>2</numNoches>
+      <puntosVisita>Mercado Central</puntosVisita>
+      <puntosVisita>Castillo de Santa Barbara</puntosVisita>
+    </estapas>
+    <estapas>
+      <destino>
+        <ciudad>Sitges</ciudad>
+        <pais>España</pais>
+      </destino>
+      <hotel>
+        <nombre>NH Barcelona</nombre>
+        <direccion>Barcelona</direccion>
+        <precio>75.0</precio>
+      </hotel>
+      <numNoches>3</numNoches>
+      <puntosVisita>Palau de Maricel</puntosVisita>
+      <puntosVisita>Museo del Cau Ferrat</puntosVisita>
+    </estapas>
+    <salida>
+      <ciudad>Elche</ciudad>
+      <pais>España</pais>
+    </salida>
+  </viaje>
+</list>
