@@ -1,5 +1,7 @@
 package model.repository.Sponsor;
 
-public interface ISponsorRepository {
+import model.repository.ICrudRepository;
+
+public interface ISponsorRepository extends ICrudRepository {
 
 }
