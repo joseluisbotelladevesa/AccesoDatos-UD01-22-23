@@ -13,7 +13,8 @@ import java.util.List;
 
 public class TorneoService implements ITorneoRepository{
     private ITorneoService iTorneoService;
-    public TorneoService() { iTorneoService =new TorneoRepository();}
+    public TorneoService() {
+        iTorneoService =new TorneoRepository();}
 
 
     @Override
@@ -22,8 +23,8 @@ public class TorneoService implements ITorneoRepository{
     }
 
     @Override
-    public Torneo FindById(Torneo id) throws SQLException {
-        return ITorneoRepository.FindById(id);
+    public Torneo FindById(int id) throws SQLException {
+        return iTorneoService.FindById(id);
     }
 
     @Override

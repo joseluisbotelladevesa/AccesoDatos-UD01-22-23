@@ -1,12 +1,15 @@
 package model.repository.Torneo;
 
 import model.entity.Sponsor;
+import model.entity.Tenista;
+import model.entity.Torneo;
 
 import java.io.FileReader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 
 public class TorneoRepository implements ITorneoRepository{
     private static final String CONFIG_FILE = "src/main/resources/propiedades.properties";
@@ -14,41 +17,15 @@ public class TorneoRepository implements ITorneoRepository{
     private Connection conexion;
 
     @Override
-    public List<Sponsor> FindAll() throws SQLException {
-        List<Sponsor>categorias = null;
-        try {
-            categorias=new ArrayList<>();
-            var properties = new Properties();
-            properties.load(new FileReader(CONFIG_FILE));
+    public void Save(Torneo entity) {
 
-            String query= "select * from category";
-
-            conexion = DriverManager.getConnection(properties.getProperty("URL"),
-                    properties.getProperty("USER"), properties.getProperty("PASS"));
-
-            PreparedStatement ps =conexion.prepareStatement(query);
-            ResultSet resultado=ps.executeQuery();
-
-            while (resultado.next()){
-                categorias.add(new Sponsor(resultado.getInt("id"),
-                        resultado.getString("name")));
-            }
-            conexion.close();
-
-        } catch (SQLException ex) {
-            return null;
-        }catch (Exception ex) {
-            System.out.println("no va");
-        }
-
-        return categorias;
     }
 
     @Override
-    public Sponsor FindById(Integer id) throws SQLException {
-        Sponsor sponsor=null;
-        try{
-            Properties properties= new Properties();
+    public Torneo FindById(String codigo) throws SQLException {
+        Torneo torneo = null;
+        try {
+            Properties properties = new Properties();
             properties.load(new FileReader(CONFIG_FILE));
 
             String query = "select * from product where id = ?";
@@ -56,45 +33,70 @@ public class TorneoRepository implements ITorneoRepository{
             conexion = DriverManager.getConnection(properties.getProperty("URL"),
                     properties.getProperty("USER"), properties.getProperty("PASS"));
 
-            PreparedStatement ps =conexion.prepareStatement(query);
-            ps.setInt(1, id);
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ps.setString(1, codigo);
 
 
+            ResultSet resultado = ps.executeQuery();
 
-            ResultSet resultado=ps.executeQuery();
-
-            while ((resultado.next())){
-                sponsor=new Sponsor(resultado.getInt("id"),
-                        resultado.getString("name"));
+            while ((resultado.next())) {
+                torneo = new Torneo((UUID) resultado.getObject("codigo"),
+                        resultado.getString("nombre"),
+                        resultado.getInt("puntos"),
+                        resultado.getDouble("premio"));
             }
 
             conexion.close();
-        }catch (SQLException s) {
+        } catch (SQLException s) {
             System.out.println("Error sql: " + s.getMessage());
-            return sponsor;
-        }catch (Exception e) {
-            return sponsor;
+            return torneo;
+        } catch (Exception e) {
+            return torneo;
 
         }
-        return sponsor;
+        return torneo;
     }
 
+    @Override
+    public List<Torneo> FindAll() throws SQLException {
+        List<Torneo> torneo = null;
+        try {
+            torneo = new ArrayList<>();
+            var properties = new Properties();
+            properties.load(new FileReader(CONFIG_FILE));
+
+            String query = "select * from category";
+
+            conexion = DriverManager.getConnection(properties.getProperty("URL"),
+                    properties.getProperty("USER"), properties.getProperty("PASS"));
+
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ResultSet resultado = ps.executeQuery();
+
+            while (resultado.next()) {
+                torneo.add( new Torneo((UUID) resultado.getObject("codigo"),
+                        resultado.getString("nombre"),
+                        resultado.getInt("puntos"),
+                        resultado.getDouble("premio"));
+            }
+            conexion.close();
+
+        } catch (SQLException ex) {
+            return null;
+        } catch (Exception ex) {
+            System.out.println("no va");
+        }
+
+        return torneo;
+    }
 
     @Override
-    public boolean Save(Sponsor entity) {
+    public boolean Delete(String id) {
         return false;
     }
 
     @Override
-    public boolean Delete(Integer id) {
+    public boolean Update(Torneo entity) {
         return false;
     }
-
-    @Override
-    public boolean Update(Sponsor entity) {
-        return false;
-    }
-
-
-}
 }

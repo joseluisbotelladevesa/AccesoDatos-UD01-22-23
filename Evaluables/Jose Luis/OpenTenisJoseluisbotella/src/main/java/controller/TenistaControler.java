@@ -2,8 +2,6 @@ package controller;
 
 import model.entity.Sponsor;
 import model.entity.Tenista;
-import model.services.Sponsor.ISponsorService;
-import model.services.Sponsor.SponsorService;
 import model.services.Tenista.ITenistaService;
 import model.services.Tenista.TenistaService;
 
@@ -18,7 +16,7 @@ public class TenistaControler {
         this.iTenistaService= new TenistaService();
     }
 
-    public List<Sponsor> GetAllProducts() throws SQLException {
+    public List<Tenista> GetAllProducts() throws SQLException {
 
         return this.iTenistaService.FindAll();
 
@@ -33,4 +31,4 @@ public class TenistaControler {
         return this.iTenistaService.Save(tenista);
     }
 }
-}
+

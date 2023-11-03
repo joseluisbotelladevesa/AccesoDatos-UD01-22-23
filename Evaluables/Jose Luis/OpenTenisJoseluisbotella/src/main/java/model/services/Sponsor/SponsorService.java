@@ -13,27 +13,27 @@ public class SponsorService implements ISponsorService{
 
     @Override
     public List<Sponsor> FindAll() throws SQLException {
-        return ISponsorRepository.FindAll();
+        return iSponsorRepository.FindAll();
     }
 
     @Override
     public boolean Save(Sponsor sponsor) {
-        return ISponsorRepository.Save(sponsor);
+        return iSponsorRepository.Save(sponsor);
     }
 
     @Override
     public Sponsor FindById(int id) throws SQLException {
-        return iSponsorRepository.FindById(id);
+        return (Sponsor) iSponsorRepository.FindById(id);
     }
 
     @Override
     public boolean Delete(int id) {
-        return ISponsorRepository.Delete(id);
+        return iSponsorRepository.Delete(id);
     }
 
     @Override
     public boolean Update(Sponsor sponsor) {
-        return iSponsorRepository.Update(category);
+        return iSponsorRepository.Update(sponsor);
     }
 }
 

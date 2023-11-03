@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface ISponsorService {
 
-    public List<Sponsor> FindAll() throws SQLException;
-    public boolean Save(Sponsor sponsor);
-    public Sponsor FindById(int id) throws SQLException;
-    public boolean Delete(int id);
-    public boolean Update(Sponsor sponsor);
+     List<Sponsor> FindAll() throws SQLException;
+     boolean Save(Sponsor sponsor);
+     Sponsor FindById(int id) throws SQLException;
+     boolean Delete(int id);
+     boolean Update(Sponsor sponsor);
 }
 

@@ -14,6 +14,46 @@ public class SponsorRepository implements ISponsorRepository{
     private Connection conexion;
 
     @Override
+    public void Save(Sponsor entity) {
+
+    }
+
+    @Override
+    public Sponsor FindById(String codigo) throws SQLException {
+        Sponsor sponsor=null;
+        try{
+            Properties properties= new Properties();
+            properties.load(new FileReader(CONFIG_FILE));
+
+            String query = "select * from product where id = ?";
+
+            conexion = DriverManager.getConnection(properties.getProperty("URL"),
+                    properties.getProperty("USER"), properties.getProperty("PASS"));
+
+            PreparedStatement ps =conexion.prepareStatement(query);
+            ps.setString(1, codigo);
+
+
+
+            ResultSet resultado=ps.executeQuery();
+
+            while ((resultado.next())){
+                sponsor=new Sponsor(resultado.getInt("id"),
+                        resultado.getString("name"));
+            }
+
+            conexion.close();
+        }catch (SQLException s) {
+            System.out.println("Error sql: " + s.getMessage());
+            return sponsor;
+        }catch (Exception e) {
+            return sponsor;
+
+        }
+        return sponsor;
+    }
+
+    @Override
     public List<Sponsor> FindAll() throws SQLException {
         List<Sponsor>categorias = null;
         try {
@@ -45,48 +85,7 @@ public class SponsorRepository implements ISponsorRepository{
     }
 
     @Override
-    public Sponsor FindById(Integer id) throws SQLException {
-        Sponsor sponsor=null;
-        try{
-            Properties properties= new Properties();
-            properties.load(new FileReader(CONFIG_FILE));
-
-            String query = "select * from product where id = ?";
-
-            conexion = DriverManager.getConnection(properties.getProperty("URL"),
-                    properties.getProperty("USER"), properties.getProperty("PASS"));
-
-            PreparedStatement ps =conexion.prepareStatement(query);
-            ps.setInt(1, id);
-
-
-
-            ResultSet resultado=ps.executeQuery();
-
-            while ((resultado.next())){
-                sponsor=new Sponsor(resultado.getInt("id"),
-                        resultado.getString("name"));
-            }
-
-            conexion.close();
-        }catch (SQLException s) {
-            System.out.println("Error sql: " + s.getMessage());
-            return sponsor;
-        }catch (Exception e) {
-            return sponsor;
-
-        }
-        return sponsor;
-    }
-
-
-    @Override
-    public boolean Save(Sponsor entity) {
-        return false;
-    }
-
-    @Override
-    public boolean Delete(Integer id) {
+    public boolean Delete(String id) {
         return false;
     }
 
@@ -97,4 +96,4 @@ public class SponsorRepository implements ISponsorRepository{
 
 
 }
-}
+

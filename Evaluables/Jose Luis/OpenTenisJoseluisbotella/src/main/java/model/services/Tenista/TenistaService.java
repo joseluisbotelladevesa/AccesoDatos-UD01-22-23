@@ -10,9 +10,10 @@ import model.repository.Tenista.TenistaRepository;
 import java.sql.SQLException;
 import java.util.List;
 
-public class TenistaService {
+public class TenistaService implements ITenistaService{
     private ITenistaRepository iTenistaRepository;
-    public TenistaService() { TenistaRepository=new TenistaRepository();}
+    public TenistaService() {
+        iTenistaRepository=new TenistaRepository();}
 
     @Override
     public List<Tenista> FindAll() throws SQLException {
@@ -20,8 +21,8 @@ public class TenistaService {
     }
 
     @Override
-    public boolean Save(Sponsor sponsor) {
-        return ITenistaRepository.Save(sponsor);
+    public boolean Save(Tenista tenista) {
+        return ITenistaRepository.Save(tenista);
     }
 
     @Override
