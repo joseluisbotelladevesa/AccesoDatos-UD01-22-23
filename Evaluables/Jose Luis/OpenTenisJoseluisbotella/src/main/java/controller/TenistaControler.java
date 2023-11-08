@@ -28,7 +28,15 @@ public class TenistaControler {
 
 
     public void CrearTenista(Tenista tenista){
+
         this.iTenistaService.Save(tenista);
     }
-}
 
+    public boolean UpdateTenista(Tenista tenista){
+
+    return this.iTenistaService.Update(tenista);
+    }
+    public boolean Delete(String id){
+        return this.iTenistaService.Delete(id);
+    }
+}

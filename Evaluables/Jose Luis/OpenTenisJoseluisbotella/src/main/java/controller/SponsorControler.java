@@ -1,12 +1,14 @@
 package controller;
 
 import model.entity.Sponsor;
+import model.entity.Tenista;
 import model.services.Sponsor.ISponsorService;
 import model.services.Sponsor.SponsorService;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public class SponsorControler {
     private ISponsorService iSponsorService;
@@ -21,7 +23,7 @@ public class SponsorControler {
 
     }
 
-    public Sponsor GetSponsorbyid(int id) throws SQLException {
+    public Sponsor GetSponsorbyid(UUID id) throws SQLException {
         return this.iSponsorService.FindById(id);
     }
 
@@ -29,5 +31,12 @@ public class SponsorControler {
     public void CrearSponsor (Sponsor sponsor){
 
         this.iSponsorService.Save(sponsor);
+    }
+    public boolean UpdateSponsor(Sponsor sponsor){
+
+        return this.iSponsorService.Update(sponsor);
+    }
+    public boolean Delete(UUID id){
+        return this.iSponsorService.Delete(id);
     }
 }

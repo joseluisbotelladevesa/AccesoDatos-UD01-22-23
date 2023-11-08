@@ -24,7 +24,7 @@ public class TorneoControler {
 
     }
 
-    public Torneo GetTenistabyid(String id) throws SQLException {
+    public Torneo GetTorneobyid(String id) throws SQLException {
         return this.iTorneoService.FindById(id);
     }
 
@@ -32,6 +32,13 @@ public class TorneoControler {
     public boolean CrearTorneo(Torneo torneo){
             return false;
         //return this.iTorneoService.Save(torneo);
+    }
+    public boolean UpdateTorneo(Torneo torneo){
+
+        return this.iTorneoService.Update(torneo);
+    }
+    public boolean Delete(String id){
+        return this.iTorneoService.Delete(id);
     }
 }
 

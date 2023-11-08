@@ -7,12 +7,13 @@ import model.repository.Sponsor.SponsorRepository;
 import model.repository.Tenista.ITenistaRepository;
 import model.repository.Tenista.TenistaRepository;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 public class TenistaService implements ITenistaService{
     private ITenistaRepository iTenistaRepository;
-    public TenistaService() {
+    public TenistaService() throws IOException {
         iTenistaRepository=new TenistaRepository();}
 
     @Override

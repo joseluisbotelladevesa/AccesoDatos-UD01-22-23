@@ -8,12 +8,13 @@ import model.repository.Tenista.TenistaRepository;
 import model.repository.Torneo.ITorneoRepository;
 import model.repository.Torneo.TorneoRepository;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 public class TorneoService implements ITorneoService{
     private ITorneoRepository iTorneoRepository;
-    public TorneoService() {
+    public TorneoService() throws IOException {
         iTorneoRepository =new TorneoRepository();}
 
 

@@ -4,6 +4,8 @@ import model.entity.Sponsor;
 import model.entity.Tenista;
 import model.repository.ICrudRepository;
 
-public interface ISponsorRepository extends ICrudRepository <Sponsor, Integer>{
+import java.util.UUID;
+
+public interface ISponsorRepository extends ICrudRepository <Sponsor, UUID>{
 
 }
