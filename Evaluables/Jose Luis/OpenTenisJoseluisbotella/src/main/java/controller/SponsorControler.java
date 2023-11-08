@@ -15,18 +15,19 @@ public class SponsorControler {
         this.iSponsorService= new SponsorService();
     }
 
-    public List<Sponsor> GetAllProducts() throws SQLException {
+    public List<Sponsor> GetAllSponsors() throws SQLException {
 
         return this.iSponsorService.FindAll();
 
     }
 
-    public Sponsor GetProductId(int id) throws SQLException {
+    public Sponsor GetSponsorbyid(int id) throws SQLException {
         return this.iSponsorService.FindById(id);
     }
 
 
-    public boolean CreateProduct(Sponsor sponsor){
-        return this.iSponsorService.Save(sponsor);
+    public void CrearSponsor (Sponsor sponsor){
+
+        this.iSponsorService.Save(sponsor);
     }
 }

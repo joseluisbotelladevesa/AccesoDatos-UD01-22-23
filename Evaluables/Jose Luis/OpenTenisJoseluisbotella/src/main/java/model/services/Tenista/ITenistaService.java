@@ -7,10 +7,9 @@ import java.util.List;
 
 public interface ITenistaService {
     public List<Tenista> FindAll() throws SQLException;
-    public boolean Save(Tenista tenista);
-    public Tenista FindById(int id) throws SQLException;
-    public boolean Delete(int id);
+    public void Save(Tenista tenista);
+    public Tenista FindById(String id) throws SQLException;
+    public boolean Delete(String id);
     public boolean Update(Tenista tenista);
 }
 
-}

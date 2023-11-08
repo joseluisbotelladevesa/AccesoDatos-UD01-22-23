@@ -16,19 +16,19 @@ public class TenistaControler {
         this.iTenistaService= new TenistaService();
     }
 
-    public List<Tenista> GetAllProducts() throws SQLException {
+    public List<Tenista> GetAllTenistas() throws SQLException {
 
         return this.iTenistaService.FindAll();
 
     }
 
-    public Sponsor GetProductId(int id) throws SQLException {
+    public Tenista GetTenistabyid(String id) throws SQLException {
         return this.iTenistaService.FindById(id);
     }
 
 
-    public boolean CreateProduct(Tenista tenista){
-        return this.iTenistaService.Save(tenista);
+    public void CrearTenista(Tenista tenista){
+        this.iTenistaService.Save(tenista);
     }
 }
 

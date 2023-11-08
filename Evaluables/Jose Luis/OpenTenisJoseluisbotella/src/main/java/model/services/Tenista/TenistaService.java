@@ -17,28 +17,31 @@ public class TenistaService implements ITenistaService{
 
     @Override
     public List<Tenista> FindAll() throws SQLException {
-        return ITenistaRepository.FindAll();
+        return iTenistaRepository.FindAll();
     }
 
     @Override
-    public boolean Save(Tenista tenista) {
-        return ITenistaRepository.Save(tenista);
+    public void Save(Tenista tenista) {
+
+        iTenistaRepository.Save(tenista);
     }
 
     @Override
-    public Sponsor FindById(int id) throws SQLException {
+    public Tenista FindById(String id) throws SQLException {
         return iTenistaRepository.FindById(id);
     }
 
     @Override
-    public boolean Delete(int id) {
-        return ITenistaRepository.Delete(id);
+    public boolean Delete(String id) {
+       // return ITenistaRepository.Delete(id);
+        return false;
     }
 
     @Override
     public boolean Update(Tenista tenista) {
-        return ITenistaRepository.Update(tenista);
+
+        //return ITenistaRepository.Update(tenista);
+        return false;
     }
-}
 }
 

@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ITorneoService {
     public List<Torneo> FindAll() throws SQLException;
-    public boolean Save(Torneo torneo);
-    public Torneo FindById(int id) throws SQLException;
-    public boolean Delete(int id);
+    public void Save(Torneo torneo);
+    public Torneo FindById(String id) throws SQLException;
+    public boolean Delete(String id);
     public boolean Update(Torneo torneo);
 
 }

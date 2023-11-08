@@ -17,17 +17,18 @@ public class SponsorService implements ISponsorService{
     }
 
     @Override
-    public boolean Save(Sponsor sponsor) {
-        return iSponsorRepository.Save(sponsor);
+    public void Save(Sponsor sponsor) {
+
+        iSponsorRepository.Save(sponsor);
     }
 
     @Override
-    public Sponsor FindById(int id) throws SQLException {
-        return (Sponsor) iSponsorRepository.FindById(id);
+    public Sponsor FindById(Integer codigo) throws SQLException {
+        return (Sponsor) iSponsorRepository.FindById(codigo);
     }
 
     @Override
-    public boolean Delete(int id) {
+    public boolean Delete(Integer id) {
         return iSponsorRepository.Delete(id);
     }
 
@@ -38,4 +39,3 @@ public class SponsorService implements ISponsorService{
 }
 
 
-}

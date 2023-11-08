@@ -77,7 +77,7 @@ public class TorneoRepository implements ITorneoRepository{
                 torneo.add( new Torneo((UUID) resultado.getObject("codigo"),
                         resultado.getString("nombre"),
                         resultado.getInt("puntos"),
-                        resultado.getDouble("premio"));
+                        resultado.getDouble("premio")));
             }
             conexion.close();
 
@@ -92,6 +92,7 @@ public class TorneoRepository implements ITorneoRepository{
 
     @Override
     public boolean Delete(String id) {
+
         return false;
     }
 

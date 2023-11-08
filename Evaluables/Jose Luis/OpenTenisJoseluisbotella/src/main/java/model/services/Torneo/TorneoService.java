@@ -11,34 +11,38 @@ import model.repository.Torneo.TorneoRepository;
 import java.sql.SQLException;
 import java.util.List;
 
-public class TorneoService implements ITorneoRepository{
-    private ITorneoService iTorneoService;
+public class TorneoService implements ITorneoService{
+    private ITorneoRepository iTorneoRepository;
     public TorneoService() {
-        iTorneoService =new TorneoRepository();}
+        iTorneoRepository =new TorneoRepository();}
 
 
     @Override
     public List FindAll() throws SQLException {
-        return iTorneoService.FindAll();
+        return iTorneoRepository.FindAll();
     }
 
     @Override
-    public Torneo FindById(int id) throws SQLException {
-        return iTorneoService.FindById(id);
+    public Torneo FindById(String id) throws SQLException {
+        return iTorneoRepository.FindById(id);
     }
 
     @Override
-    public boolean Save(Torneo torneo) {
-        return ITorneoRepository.Save(torneo);
+    public void Save(Torneo torneo) {
+
+        iTorneoRepository.Save(torneo);
     }
 
+
+
     @Override
-    public boolean Delete(Object id) {
+    public boolean Delete(String id) {
+
         return false;
     }
 
     @Override
-    public boolean Update(Object entity) {
+    public boolean Update(Torneo torneo) {
         return false;
     }
 }

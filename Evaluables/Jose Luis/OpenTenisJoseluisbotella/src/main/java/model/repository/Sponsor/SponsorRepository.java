@@ -19,7 +19,7 @@ public class SponsorRepository implements ISponsorRepository{
     }
 
     @Override
-    public Sponsor FindById(String codigo) throws SQLException {
+    public Sponsor FindById(Integer codigo) throws SQLException {
         Sponsor sponsor=null;
         try{
             Properties properties= new Properties();
@@ -31,7 +31,7 @@ public class SponsorRepository implements ISponsorRepository{
                     properties.getProperty("USER"), properties.getProperty("PASS"));
 
             PreparedStatement ps =conexion.prepareStatement(query);
-            ps.setString(1, codigo);
+            ps.setInt(1, codigo);
 
 
 
@@ -85,7 +85,7 @@ public class SponsorRepository implements ISponsorRepository{
     }
 
     @Override
-    public boolean Delete(String id) {
+    public boolean Delete(Integer id) {
         return false;
     }
 
