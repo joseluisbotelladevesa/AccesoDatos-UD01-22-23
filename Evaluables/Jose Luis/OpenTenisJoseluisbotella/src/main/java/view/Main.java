@@ -122,25 +122,47 @@ public class Main {
         }
     }
 
-    private static void BorrarSponsor() throws IOException {
+    private static void BorrarSponsor() throws IOException, SQLException {
         SponsorControler sponsorControler = new SponsorControler();
-        if(sponsorControler.Delete(t1)){
-            System.out.println("Producto borrado");
+        System.out.println("Que sponsor quieres borrar");
+        String nombresponsor = sc.nextLine();
+        UUID id = null;
+        List<Sponsor> sponsors = sponsorControler.GetAllSponsors();
+
+        if (sponsors != null) {
+            for (Sponsor spon : sponsors) {
+                if (nombresponsor.equals(spon.getNombre())) {
+                    id = spon.getCodigo();
+                }
+            }
+        }
+            if (sponsorControler.Delete(id)) {
+                System.out.println("Sponsor borrado");
+            } else {
+                System.out.println("Sponsor no borrado");
+            }
+        }
+
+
+    private static void ModificarSponsor() throws IOException, SQLException {
+        SponsorControler sponsorControler = new SponsorControler();
+        System.out.println("Nombre del Sponsor que desea modificar: ");
+        String nombresponsor=sc.nextLine();
+        Sponsor s1 = null;
+        List<Sponsor> sponsors = sponsorControler.GetAllSponsors();
+
+        if(sponsors != null) {
+            for (Sponsor spon : sponsors) {
+                if (nombresponsor.equals(spon.getNombre())) {
+                    s1= spon;
+                }
+            }
+        }
+        if(sponsorControler.UpdateSponsor(s1)){
+            System.out.println("Sponsor actualizado");
         }
         else{
-            System.out.println("Producto no borrado");
-        }
-    }
-
-    private static void ModificarSponsor() throws IOException {
-        SponsorControler sponsorControler = new SponsorControler();
-        System.out.println("Nombre del producto: ");
-
-        if(sponsorControler.UpdateSponsor(t1)){
-            System.out.println("Producto actualizado");
-        }
-        else{
-            System.out.println("Producto no actualizado");
+            System.out.println("Sponsor no actualizado");
         }
     }
 
@@ -204,29 +226,52 @@ public class Main {
             System.out.println(tenista);
         }
         else {
-            System.out.println("Producto no encontrado");
+            System.out.println("Tenista no encontrado");
         }
     }
 
-    private static void EliminarTenista() throws IOException {
+    private static void EliminarTenista() throws IOException, SQLException {
         TenistaControler tenistaControler = new TenistaControler();
-        if(tenistaControler.Delete(t1)){
-            System.out.println("Producto borrado");
+        System.out.println("Que tenista quieres borrar");
+        String nombretenista = sc.nextLine();
+        String id = null;
+        List<Tenista> sponsors = tenistaControler.GetAllTenistas();
+
+        if (sponsors != null) {
+            for (Tenista teni : sponsors) {
+                if (nombretenista.equals(teni.getNombre())) {
+                    id = String.valueOf(teni.getCodigo());
+                }
+            }
+        }
+        if(tenistaControler.Delete(id)){
+            System.out.println("Tenista borrado");
         }
         else{
-            System.out.println("Producto no borrado");
+            System.out.println("Tenista no borrado");
         }
     }
 
-    private static void ModificarTenista() throws IOException {
+    private static void ModificarTenista() throws IOException, SQLException {
         TenistaControler tenistaControler = new TenistaControler();
-        System.out.println("Nombre del producto: ");
+        System.out.println("Nombre del tenista: ");
+        System.out.println("Que tenista quieres borrar");
+        String nombretenista = sc.nextLine();
+        Tenista tenista=null;
+        List<Tenista> sponsors = tenistaControler.GetAllTenistas();
 
-        if(tenistaControler.UpdateTenista(t1)){
-            System.out.println("Producto actualizado");
+        if (sponsors != null) {
+            for (Tenista teni : sponsors) {
+                if (nombretenista.equals(teni.getNombre())) {
+                    tenista=teni;
+                }
+            }
+        }
+        if(tenistaControler.UpdateTenista(tenista)){
+            System.out.println("Tenista actualizado");
         }
         else{
-            System.out.println("Producto no actualizado");
+            System.out.println("Tenista no actualizado");
         }
     }
 
@@ -298,9 +343,21 @@ public class Main {
         }
     }
 
-    private static void EliminarTorneo() throws IOException {
+    private static void EliminarTorneo() throws IOException, SQLException {
         TorneoControler torneoControler=new TorneoControler();
-        if(torneoControler.Delete(t1)){
+        System.out.println("Que torneo quieres borrar");
+        String nombretenista = sc.nextLine();
+        String id = null;
+        List<Torneo> torneos = torneoControler.GetAllTorneos();
+
+        if (torneos != null) {
+            for (Torneo tor : torneos) {
+                if (nombretenista.equals(tor.getNombre())) {
+                    id = String.valueOf(tor.getCodigo());
+                }
+            }
+        }
+        if(torneoControler.Delete(id)){
             System.out.println("Producto borrado");
         }
         else{
@@ -308,11 +365,22 @@ public class Main {
         }
     }
 
-    private static void ModificarTorneo() throws IOException {
+    private static void ModificarTorneo() throws IOException, SQLException {
         TorneoControler torneoControler=new TorneoControler();
         System.out.println("Nombre del producto: ");
+        System.out.println("Que torneo quieres borrar");
+        String nombretenista = sc.nextLine();
+        Torneo torneo = null;
+        List<Torneo> torneos = torneoControler.GetAllTorneos();
 
-        if(torneoControler.UpdateTorneo(t1)){
+        if (torneos != null) {
+            for (Torneo tor : torneos) {
+                if (nombretenista.equals(tor.getNombre())) {
+                    torneo = tor;
+                }
+            }
+        }
+        if(torneoControler.UpdateTorneo(torneo)){
             System.out.println("Producto actualizado");
         }
         else{

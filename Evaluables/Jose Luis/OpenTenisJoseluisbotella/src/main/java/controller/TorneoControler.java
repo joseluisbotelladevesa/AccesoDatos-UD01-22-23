@@ -29,9 +29,8 @@ public class TorneoControler {
     }
 
 
-    public boolean CrearTorneo(Torneo torneo){
-            return false;
-        //return this.iTorneoService.Save(torneo);
+    public void CrearTorneo(Torneo torneo){
+        this.iTorneoService.Save(torneo);
     }
     public boolean UpdateTorneo(Torneo torneo){
 
