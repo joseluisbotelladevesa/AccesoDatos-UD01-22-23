@@ -38,7 +38,7 @@ public class TenistaRepository implements ITenistaRepository {
 
             conexion = DriverManager.getConnection(URL, USER, PASS);
 
-            String query = "insert into product(reference, price, category, name) values(?, ?, ?, ?);";
+            String query = "insert into product(codigo, nombre, nacionalidad) values(?, ?, ?);";
 
             PreparedStatement ps = conexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
@@ -72,7 +72,7 @@ public class TenistaRepository implements ITenistaRepository {
             Properties properties = new Properties();
             properties.load(new FileReader(CONFIG_FILE));
 
-            String query = "select * from product where id = ?";
+            String query = "select * from tenista where codigo = ?";
 
             conexion = DriverManager.getConnection(properties.getProperty("URL"),
                     properties.getProperty("USER"), properties.getProperty("PASS"));
@@ -107,7 +107,7 @@ public class TenistaRepository implements ITenistaRepository {
             var properties = new Properties();
             properties.load(new FileReader(CONFIG_FILE));
 
-            String query = "select * from category";
+            String query = "select * from tenista";
 
             conexion = DriverManager.getConnection(properties.getProperty("URL"),
                     properties.getProperty("USER"), properties.getProperty("PASS"));
@@ -135,15 +135,18 @@ public class TenistaRepository implements ITenistaRepository {
         boolean result = false;
         try(Connection conexion = DriverManager.getConnection(URL, USER, PASS)){
 
-            String query = "delete from product where id = ?;";
+            String query = "delete from Tenista where codigo = ?;";
 
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setString(1, id);
 
             result = ps.executeUpdate() > 0;
+            if(result){
+                String query2 = "delete from TenistaContrato where codTenista = ?;";
+            }
 
         }catch (Exception ex){
-            System.out.println("Error en borrado del producto" + ex.getMessage());
+            System.out.println("Error en borrado del tenista" + ex.getMessage());
         }
         return result;
     }
@@ -155,7 +158,7 @@ public class TenistaRepository implements ITenistaRepository {
 
             conexion = DriverManager.getConnection(URL, USER, PASS);
 
-            String query = "update product set reference = ?, price = ?, category = ?, name = ?  where id = ?;";
+            String query = "update product set codigo = ?, nombre = ?, nacionalidad = ? where codigo = ?;";
 
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setObject(1, tenista.getCodigo());
@@ -165,7 +168,7 @@ public class TenistaRepository implements ITenistaRepository {
             result = ps.executeUpdate() > 0;
 
         }catch (Exception ex){
-            System.out.println("Error en update product: " + ex.getMessage());
+            System.out.println("Error en update tenista: " + ex.getMessage());
         }
         return result;
     }

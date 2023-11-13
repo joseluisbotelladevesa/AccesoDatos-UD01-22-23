@@ -38,9 +38,9 @@ public class SponsorRepository implements ISponsorRepository{
 
             conexion = DriverManager.getConnection(this.URL, this.USER, this.PASS);
 
-            String query = "insert into product(reference, price, category, name) values(?, ?, ?, ?);";
+            String query = "insert into sponsor(codigo, nombre) values(?, ?);";
 
-            PreparedStatement ps = conexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = conexion.prepareStatement(query);
 
             ps.setObject(1, sponsor.getCodigo());
             ps.setString(2, sponsor.getNombre());
@@ -49,16 +49,15 @@ public class SponsorRepository implements ISponsorRepository{
             // ps.execute();
 
             result = ps.executeUpdate() > 0;
-
-            if (result) {
-                ResultSet keys = ps.getGeneratedKeys();
-                keys.next();
-                idTenista = keys.getInt(1);
-
+            if (result){
+                System.out.println("Sponsor Creado");
+            }else{
+                System.out.println("Sponsor no creado");
             }
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            System.out.println("Sql error: "+e.getMessage());
+            }
     }
 
     @Override
@@ -68,7 +67,7 @@ public class SponsorRepository implements ISponsorRepository{
             Properties properties= new Properties();
             properties.load(new FileReader(CONFIG_FILE));
 
-            String query = "select * from product where id = ?";
+            String query = "select * from sponsor where codigo = ?";
 
             conexion = DriverManager.getConnection(properties.getProperty("URL"),
                     properties.getProperty("USER"), properties.getProperty("PASS"));
@@ -105,7 +104,7 @@ public class SponsorRepository implements ISponsorRepository{
             var properties = new Properties();
             properties.load(new FileReader(CONFIG_FILE));
 
-            String query= "select * from category";
+            String query= "select * from sponsor";
 
             conexion = DriverManager.getConnection(properties.getProperty("URL"),
                     properties.getProperty("USER"), properties.getProperty("PASS"));
@@ -113,11 +112,9 @@ public class SponsorRepository implements ISponsorRepository{
             PreparedStatement ps =conexion.prepareStatement(query);
             ResultSet resultado=ps.executeQuery();
 
-            UUID codigo = UUID.randomUUID();
-
             while (resultado.next()){
-                categorias.add(new Sponsor((UUID) resultado.getObject(String.valueOf(codigo)),
-                        resultado.getString("name")));
+                categorias.add(new Sponsor((UUID) resultado.getObject("codigo"),
+                        resultado.getString("nombre")));
             }
             conexion.close();
 
@@ -135,7 +132,7 @@ public class SponsorRepository implements ISponsorRepository{
         boolean result = false;
         try(Connection conexion = DriverManager.getConnection(URL, USER, PASS)){
 
-            String query = "delete from product where id = ?;";
+            String query = "delete from product where codigo = ?;";
 
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setObject(1, id);
@@ -143,7 +140,7 @@ public class SponsorRepository implements ISponsorRepository{
             result = ps.executeUpdate() > 0;
 
         }catch (Exception ex){
-            System.out.println("Error en borrado del producto" + ex.getMessage());
+            System.out.println("Error en borrado del sponsor" + ex.getMessage());
         }
         return result;
     }
@@ -155,7 +152,7 @@ public class SponsorRepository implements ISponsorRepository{
 
             conexion = DriverManager.getConnection(URL, USER, PASS);
 
-            String query = "update product set reference = ?, price = ?, category = ?, name = ?  where id = ?;";
+            String query = "update sponsor set codigo = ?, nombre = ?;";
 
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setObject(1, sponsor.getCodigo());
@@ -164,7 +161,7 @@ public class SponsorRepository implements ISponsorRepository{
             result = ps.executeUpdate() > 0;
 
         }catch (Exception ex){
-            System.out.println("Error en update product: " + ex.getMessage());
+            System.out.println("Error en update sponsor: " + ex.getMessage());
         }
         return result;
     }

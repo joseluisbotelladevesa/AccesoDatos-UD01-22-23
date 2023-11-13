@@ -40,7 +40,7 @@ public class TorneoRepository implements ITorneoRepository{
 
             conexion = DriverManager.getConnection(this.URL, this.USER, this.PASS);
 
-            String query = "insert into product(reference, price, category, name) values(?, ?, ?, ?);";
+            String query = "insert into torneo(codigo, nombre, puntos, premio) values(?, ?, ?, ?);";
 
             PreparedStatement ps = conexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
@@ -72,7 +72,7 @@ public class TorneoRepository implements ITorneoRepository{
             Properties properties = new Properties();
             properties.load(new FileReader(CONFIG_FILE));
 
-            String query = "select * from product where id = ?";
+            String query = "select * from product where codigo = ?";
 
             conexion = DriverManager.getConnection(properties.getProperty("URL"),
                     properties.getProperty("USER"), properties.getProperty("PASS"));
@@ -109,7 +109,7 @@ public class TorneoRepository implements ITorneoRepository{
             var properties = new Properties();
             properties.load(new FileReader(CONFIG_FILE));
 
-            String query = "select * from category";
+            String query = "select * from torneo";
 
             conexion = DriverManager.getConnection(properties.getProperty("URL"),
                     properties.getProperty("USER"), properties.getProperty("PASS"));
@@ -140,7 +140,7 @@ public class TorneoRepository implements ITorneoRepository{
         boolean result = false;
         try(Connection conexion = DriverManager.getConnection(URL, USER, PASS)){
 
-            String query = "delete from product where id = ?;";
+            String query = "delete from product where codigo = ?;";
 
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setString(1, id);
@@ -148,7 +148,7 @@ public class TorneoRepository implements ITorneoRepository{
             result = ps.executeUpdate() > 0;
 
         }catch (Exception ex){
-            System.out.println("Error en borrado del producto" + ex.getMessage());
+            System.out.println("Error en borrado del torneo" + ex.getMessage());
         }
         return result;
     }
@@ -172,7 +172,7 @@ public class TorneoRepository implements ITorneoRepository{
             result = ps.executeUpdate() > 0;
 
         }catch (Exception ex){
-            System.out.println("Error en update product: " + ex.getMessage());
+            System.out.println("Error en update torneo: " + ex.getMessage());
         }
         return result;
     }

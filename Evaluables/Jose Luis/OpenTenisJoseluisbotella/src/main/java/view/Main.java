@@ -91,6 +91,8 @@ public class Main {
             for (Sponsor spon : sponsors) {
                 System.out.println(spon);
             }
+        }else{
+            System.out.println("nulo");
         }
     }
 
