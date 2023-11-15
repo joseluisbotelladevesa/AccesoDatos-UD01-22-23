@@ -1,12 +1,12 @@
 package model.repository.Tenista;
 
 import model.entity.Contrato;
-import model.entity.Sponsor;
 import model.entity.Tenista;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -188,28 +188,39 @@ public class TenistaRepository implements ITenistaRepository {
             result = ps.executeUpdate() > 0;
 
         }catch (Exception ex){
-            System.out.println("Error en borrado del tenista" + ex.getMessage());
+            System.out.println("Error al crear torneo" + ex.getMessage());
         }
         return result;
     }
 
     @Override
-    public boolean AddContrato(Contrato contrato) {
-        boolean result = false;
-        try{
+    public boolean AddContrato(String codSponsor, String codTenista, LocalDate
+            fechaInicio, LocalDate fechaFin, double saldo) {
+        boolean result=false;
+
+        try {
 
             conexion = DriverManager.getConnection(URL, USER, PASS);
 
-            String query = "update tenista set codigo = ?, nombre = ?, nacionalidad = ? where codigo = ?;";
-
+            String query = "select * from contrato;";
+            int codigoSponsor = Integer.parseInt(codSponsor);
             PreparedStatement ps = conexion.prepareStatement(query);
-            ps.setObject(1, tenista.getCodigo());
-            ps.setString(2, tenista.getNombre());
-            ps.setString(3, tenista.getNacionalidad());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Contrato contrato = new Contrato(
+                        (UUID) rs.getObject("codigo"),
+                        rs.getDate("fechaInicio").toLocalDate(),
+                        rs.getDate("fechaFin").toLocalDate(),
+                        rs.getDouble("saldo"),
+                        rs.getInt("codSponsor"));
+                if (codigoSponsor == contrato.getCodSponsor() && fechaInicio == contrato.getFechaInicio()
+                        && fechaFin == contrato.getFechaFin() && saldo == contrato.getSaldo()) {
 
-            result = ps.executeUpdate() > 0;
+                }
+            }
+           result=true;
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Error en update tenista: " + ex.getMessage());
         }
         return result;

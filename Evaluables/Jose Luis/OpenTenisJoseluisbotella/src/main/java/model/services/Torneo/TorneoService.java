@@ -30,7 +30,6 @@ public class TorneoService implements ITorneoService{
 
     @Override
     public void Save(Torneo torneo) {
-
         iTorneoRepository.Save(torneo);
     }
 
@@ -39,12 +38,12 @@ public class TorneoService implements ITorneoService{
     @Override
     public boolean Delete(String id) {
 
-        return false;
+        return iTorneoRepository.Delete(id);
     }
 
     @Override
     public boolean Update(Torneo torneo) {
-        return false;
+        return iTorneoRepository.Update(torneo);
     }
 }
 

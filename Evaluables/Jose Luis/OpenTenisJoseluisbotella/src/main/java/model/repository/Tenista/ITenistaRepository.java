@@ -10,6 +10,8 @@ public interface ITenistaRepository extends ICrudRepository<Tenista, String> {
 
     boolean AddTorneoGanado(String codTenista, String codTorneo);
 
-    boolean AddContrato(Contrato contrato);
+    boolean AddContrato(String codSponsor, String codTenista, LocalDate
+            fechaInicio, LocalDate fechaFin, double saldo);
+
 
 }

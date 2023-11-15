@@ -43,11 +43,12 @@ public class TenistaControler {
         return this.iTenistaService.Delete(id);
     }
 
-    boolean AddTorneoGanado(String codTenista, String codTorneo) {
+    public boolean AddTorneoGanado(String codTenista, String codTorneo) {
         return this.iTenistaService.AddTorneoGanado(codTenista, codTorneo);
     }
 
-    public boolean AddContrato(Contrato contrato) {
-        return this.iTenistaService.AddContrato(contrato);
+    public boolean AddContrato(String codSponsor, String codTenista, LocalDate
+            fechaInicio, LocalDate fechaFin, double saldo) {
+        return this.iTenistaService.AddContrato(codSponsor, codTenista, fechaInicio, fechaFin, saldo);
     }
 }

@@ -28,7 +28,6 @@ public class SponsorRepository implements ISponsorRepository{
 
     @Override
     public void Save(Sponsor sponsor) {
-        int idTenista = 0;
         try {
             boolean result = false;
 
@@ -71,15 +70,15 @@ public class SponsorRepository implements ISponsorRepository{
 
 
             PreparedStatement ps =conexion.prepareStatement(query);
-            ps.setObject(1, codigo);    //no se si esta bien preguntar en clase a dani guapo
+            ps.setInt(1, codigo);    //no se si esta bien preguntar en clase a dani guapo
 
 
 
             ResultSet resultado=ps.executeQuery();
 
             while ((resultado.next())){
-                sponsor=new Sponsor( resultado.getInt(codigo),
-                        resultado.getString("name"));
+                sponsor=new Sponsor( resultado.getInt("codigo"),
+                        resultado.getString("nombre"));
             }
 
             conexion.close();
@@ -95,9 +94,9 @@ public class SponsorRepository implements ISponsorRepository{
 
     @Override
     public List<Sponsor> FindAll() throws SQLException {
-        List<Sponsor>categorias = null;
+        List<Sponsor>sponsors = null;
         try {
-            categorias=new ArrayList<>();
+            sponsors=new ArrayList<>();
             var properties = new Properties();
             properties.load(new FileReader(CONFIG_FILE));
 
@@ -110,18 +109,18 @@ public class SponsorRepository implements ISponsorRepository{
             ResultSet resultado=ps.executeQuery();
 
             while (resultado.next()){
-                categorias.add(new Sponsor( resultado.getInt("codigo"),
+                sponsors.add(new Sponsor( resultado.getInt("codigo"),
                         resultado.getString("nombre")));
             }
             conexion.close();
 
         } catch (SQLException ex) {
-            return null;
+            System.out.println("error: "+ex.getMessage());
         }catch (Exception ex) {
             System.out.println("no va");
         }
 
-        return categorias;
+        return sponsors;
     }
 
     @Override
@@ -129,7 +128,7 @@ public class SponsorRepository implements ISponsorRepository{
         boolean result = false;
         try(Connection conexion = DriverManager.getConnection(URL, USER, PASS)){
 
-            String query = "delete from product where codigo = ?;";
+            String query = "delete from sponsor where codigo = ?;";
 
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setObject(1, id);

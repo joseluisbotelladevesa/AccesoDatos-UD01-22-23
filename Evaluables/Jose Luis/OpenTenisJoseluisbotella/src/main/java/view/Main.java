@@ -3,19 +3,20 @@ package view;
 import controller.SponsorControler;
 import controller.TenistaControler;
 import controller.TorneoControler;
+import model.entity.Contrato;
 import model.entity.Sponsor;
 import model.entity.Tenista;
 import model.entity.Torneo;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
+    static Random rd=new Random();
     static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
         try {
@@ -73,7 +74,7 @@ public class Main {
                     break;
             }
         } while (opcion != 0);
-        
+
     }
 
     private static void CrearSponsor() throws IOException {
@@ -83,7 +84,7 @@ public class Main {
         System.out.println("Codigo Sponsor: ");
         int codigo = sc.nextInt();
         Sponsor s1=new Sponsor(codigo, nombre);
-        sponsorControler.CrearSponsor(s1);
+        sponsorControler.Save(s1);
     }
 
     private static void MostrarSponsors() throws IOException, SQLException {
@@ -154,12 +155,15 @@ public class Main {
         System.out.println("Nombre del Sponsor que desea modificar: ");
         String nombresponsor=sc.nextLine();
         Sponsor s1 = null;
+        System.out.println("Nuevo nombre del sponsor: ");
+        String nuevonombre=sc.nextLine();
         List<Sponsor> sponsors = sponsorControler.GetAllSponsors();
 
         if(sponsors != null) {
             for (Sponsor spon : sponsors) {
                 if (nombresponsor.equals(spon.getNombre())) {
                     s1= spon;
+                    spon.setNombre(nuevonombre);
                 }
             }
         }
@@ -206,7 +210,11 @@ public class Main {
     private static void CrearTenista() throws IOException {
         TenistaControler tenistaControler=new TenistaControler();
         UUID codigo = UUID.randomUUID();
-        Tenista t1=new Tenista(codigo, "Francisco", "españa");
+        System.out.println("Dime un nombre de tenista: ");
+        String nombre=sc.nextLine();
+        System.out.println("Dime la nacionalidad del tenista");
+        String nacionalidad=sc.nextLine();
+        Tenista t1=new Tenista(codigo, nombre, nacionalidad);
         tenistaControler.CrearTenista(t1);
     }
 
@@ -224,7 +232,7 @@ public class Main {
 
     private static void EncontrarTenista() throws IOException, SQLException {
         TenistaControler tenistaControler = new TenistaControler();
-        Tenista tenista = tenistaControler.GetTenistabyid("1");
+        Tenista tenista = tenistaControler.GetTenistabyid();
 
         if(tenista != null)
         {
@@ -240,10 +248,10 @@ public class Main {
         System.out.println("Que tenista quieres borrar");
         String nombretenista = sc.nextLine();
         String id = null;
-        List<Tenista> sponsors = tenistaControler.GetAllTenistas();
+        List<Tenista> tenistas = tenistaControler.GetAllTenistas();
 
-        if (sponsors != null) {
-            for (Tenista teni : sponsors) {
+        if (tenistas != null) {
+            for (Tenista teni : tenistas) {
                 if (nombretenista.equals(teni.getNombre())) {
                     id = String.valueOf(teni.getCodigo());
                 }
@@ -280,27 +288,50 @@ public class Main {
         }
     }
 
-    private static void CrearContratoTenista() throws IOException {
+    private static void CrearContratoTenista() throws IOException, SQLException {
         TenistaControler tenistaControler = new TenistaControler();
-        System.out.println("Codigo tenista");
+
+        int mes=rd.nextInt(0, 12), anyo=rd.nextInt(0,2023), dia=rd.nextInt(1,31);
+        int mesfin=rd.nextInt(0, 12), anyofin=rd.nextInt(2023,2040), diafin=rd.nextInt(1,31);
+        LocalDate fechaInicio = LocalDate.of(anyo, mes, dia);
+        LocalDate fechaFin = LocalDate.of(anyofin, mesfin, diafin);
+        System.out.println("Sueldo contrato: ");
+        double saldo=sc.nextDouble();
+
+        UUID codTenista = null;
+        int codSponsor = 0;
+        System.out.println("Que tenista quieres añadirle un contrato: ");
+        String nombretenista = sc.nextLine();
+        List<Tenista>tenistas=new ArrayList<>();
+        tenistas=tenistaControler.GetAllTenistas();
+        for (int i=0; i<tenistas.size(); i++){
+            if (tenistas.get(i).getNombre().equals(nombretenista)){
+                codTenista= tenistas.get(i).getCodigo();
+            }
+        }
+        System.out.println("Que sponsor quieres ponerle al contrato: ");
+        String nombreSponsor = sc.nextLine();
+        SponsorControler sponsorControler = new SponsorControler();
+        List<Sponsor>sponsors=new ArrayList<>();
+        sponsors=sponsorControler.GetAllSponsors();
+        for (int i=0; i<tenistas.size(); i++){
+            if (sponsors.get(i).getNombre().equals(nombreSponsor)){
+                codSponsor= sponsors.get(i).getCodigo();
+            }
+        }
+        String codigoSponsor= String.valueOf(codSponsor);
+        String codigoTenista= String.valueOf(codTenista);
+        tenistaControler.AddContrato(codigoSponsor, codigoTenista, fechaInicio, fechaFin, saldo);
+
     }
 
-    private static void AñadirTorneoGanado() throws IOException {
+    private static void AñadirTorneoGanado() throws IOException, SQLException {
         TenistaControler tenistaControler = new TenistaControler();
         System.out.println("Codigo tenista que ha ganado un torneo: ");
-        int codtenista = sc.nextInt();
+        String codtenista = sc.nextLine();
         System.out.println("Codigo torneo que ha ganado: ");
-        int codtorneo = sc.nextInt();
-        List<Tenista> sponsors = tenistaControler.GetAllTenistas();
-
-        if (sponsors != null) {
-            for (Tenista teni : sponsors) {
-                if (nombretenista.equals(teni.getNombre())) {
-                    tenista = teni;
-                }
-            }
-
-        }
+        String codtorneo = sc.nextLine();
+        tenistaControler.AddTorneoGanado(codtenista, codtorneo);
     }
 
     private static void torneo() throws IOException, SQLException {

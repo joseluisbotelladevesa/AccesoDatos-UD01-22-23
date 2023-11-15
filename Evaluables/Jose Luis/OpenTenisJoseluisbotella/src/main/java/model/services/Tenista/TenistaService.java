@@ -3,6 +3,7 @@ package model.services.Tenista;
 import model.entity.Contrato;
 import model.entity.Sponsor;
 import model.entity.Tenista;
+import model.repository.Contrato.IContratoRepository;
 import model.repository.Sponsor.ISponsorRepository;
 import model.repository.Sponsor.SponsorRepository;
 import model.repository.Tenista.ITenistaRepository;
@@ -12,9 +13,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public class TenistaService implements ITenistaService{
     private ITenistaRepository iTenistaRepository;
+    private IContratoRepository iContratoRepository;
     public TenistaService() throws IOException {
         iTenistaRepository=new TenistaRepository();}
 
@@ -53,8 +56,14 @@ public class TenistaService implements ITenistaService{
     }
 
     @Override
-    public boolean AddContrato(Contrato contrato) {
-        return iTenistaRepository.AddContrato(contrato);
+    public boolean AddContrato(String codSponsor, String codTenista, LocalDate
+            fechaInicio, LocalDate fechaFin, double saldo) {
+        UUID codigo=UUID.randomUUID();
+        Contrato contrato=new Contrato(codigo, fechaInicio, fechaFin, saldo,Integer.parseInt( codSponsor));
+        iContratoRepository.addContrato(contrato);
+
+        return iTenistaRepository.AddContrato( codSponsor,  codTenista,
+                fechaInicio,  fechaFin,  saldo);
     }
 }
 

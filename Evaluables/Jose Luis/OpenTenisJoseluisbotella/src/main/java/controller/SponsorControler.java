@@ -28,7 +28,7 @@ public class SponsorControler {
     }
 
 
-    public void CrearSponsor (Sponsor sponsor){
+    public void Save (Sponsor sponsor){
 
         this.iSponsorService.Save(sponsor);
     }
