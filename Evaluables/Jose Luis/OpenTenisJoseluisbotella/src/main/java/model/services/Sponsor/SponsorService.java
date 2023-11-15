@@ -25,12 +25,12 @@ public class SponsorService implements ISponsorService{
     }
 
     @Override
-    public Sponsor FindById(UUID codigo) throws SQLException {
+    public Sponsor FindById(int codigo) throws SQLException {
         return iSponsorRepository.FindById(codigo);
     }
 
     @Override
-    public boolean Delete(UUID id) {
+    public boolean Delete(int id) {
         return iSponsorRepository.Delete(id);
     }
 

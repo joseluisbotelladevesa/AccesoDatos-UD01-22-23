@@ -6,15 +6,12 @@ import model.entity.Tenista;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 public class SponsorRepository implements ISponsorRepository{
     private static final String CONFIG_FILE = "src/main/resources/propiedades.properties";
     private Connection conexion;
-
+    static Scanner sc= new Scanner(System.in);
     private static String URL;
     private static String USER;
     private static String PASS;
@@ -61,7 +58,7 @@ public class SponsorRepository implements ISponsorRepository{
     }
 
     @Override
-    public Sponsor FindById(UUID codigo) throws SQLException {
+    public Sponsor FindById(Integer codigo) throws SQLException {
         Sponsor sponsor=null;
         try{
             Properties properties= new Properties();
@@ -71,7 +68,7 @@ public class SponsorRepository implements ISponsorRepository{
 
             conexion = DriverManager.getConnection(properties.getProperty("URL"),
                     properties.getProperty("USER"), properties.getProperty("PASS"));
-            codigo = UUID.randomUUID();
+
 
             PreparedStatement ps =conexion.prepareStatement(query);
             ps.setObject(1, codigo);    //no se si esta bien preguntar en clase a dani guapo
@@ -81,7 +78,7 @@ public class SponsorRepository implements ISponsorRepository{
             ResultSet resultado=ps.executeQuery();
 
             while ((resultado.next())){
-                sponsor=new Sponsor((UUID) resultado.getObject(String.valueOf(codigo)),
+                sponsor=new Sponsor( resultado.getInt(codigo),
                         resultado.getString("name"));
             }
 
@@ -113,7 +110,7 @@ public class SponsorRepository implements ISponsorRepository{
             ResultSet resultado=ps.executeQuery();
 
             while (resultado.next()){
-                categorias.add(new Sponsor((UUID) resultado.getObject("codigo"),
+                categorias.add(new Sponsor( resultado.getInt("codigo"),
                         resultado.getString("nombre")));
             }
             conexion.close();
@@ -128,7 +125,7 @@ public class SponsorRepository implements ISponsorRepository{
     }
 
     @Override
-    public boolean Delete(UUID id) {
+    public boolean Delete(Integer id) {
         boolean result = false;
         try(Connection conexion = DriverManager.getConnection(URL, USER, PASS)){
 

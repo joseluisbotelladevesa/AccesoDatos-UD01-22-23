@@ -1,5 +1,6 @@
 package model.repository.Tenista;
 
+import model.entity.Contrato;
 import model.entity.Sponsor;
 import model.entity.Tenista;
 
@@ -38,7 +39,7 @@ public class TenistaRepository implements ITenistaRepository {
 
             conexion = DriverManager.getConnection(URL, USER, PASS);
 
-            String query = "insert into product(codigo, nombre, nacionalidad) values(?, ?, ?);";
+            String query = "insert into tenista(codigo, nombre, nacionalidad) values(?, ?, ?);";
 
             PreparedStatement ps = conexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
@@ -158,7 +159,7 @@ public class TenistaRepository implements ITenistaRepository {
 
             conexion = DriverManager.getConnection(URL, USER, PASS);
 
-            String query = "update product set codigo = ?, nombre = ?, nacionalidad = ? where codigo = ?;";
+            String query = "update tenista set codigo = ?, nombre = ?, nacionalidad = ? where codigo = ?;";
 
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setObject(1, tenista.getCodigo());
@@ -173,5 +174,45 @@ public class TenistaRepository implements ITenistaRepository {
         return result;
     }
 
+    @Override
+    public boolean AddTorneoGanado(String codTenista, String codTorneo) {
+        boolean result = false;
+        try(Connection conexion = DriverManager.getConnection(URL, USER, PASS)){
+
+            String query = "insert into tenistaGanado(codTenista, codTorneo) values(?, ?);";
+
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ps.setString(1,codTenista);
+            ps.setString(2,codTorneo);
+
+            result = ps.executeUpdate() > 0;
+
+        }catch (Exception ex){
+            System.out.println("Error en borrado del tenista" + ex.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public boolean AddContrato(Contrato contrato) {
+        boolean result = false;
+        try{
+
+            conexion = DriverManager.getConnection(URL, USER, PASS);
+
+            String query = "update tenista set codigo = ?, nombre = ?, nacionalidad = ? where codigo = ?;";
+
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ps.setObject(1, tenista.getCodigo());
+            ps.setString(2, tenista.getNombre());
+            ps.setString(3, tenista.getNacionalidad());
+
+            result = ps.executeUpdate() > 0;
+
+        }catch (Exception ex){
+            System.out.println("Error en update tenista: " + ex.getMessage());
+        }
+        return result;
+    }
 
 }

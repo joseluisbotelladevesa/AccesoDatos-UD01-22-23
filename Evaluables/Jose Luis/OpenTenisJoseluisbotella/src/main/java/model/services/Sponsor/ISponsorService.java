@@ -10,8 +10,8 @@ public interface ISponsorService {
 
      List<Sponsor> FindAll() throws SQLException;
      void Save(Sponsor sponsor);
-     Sponsor FindById(UUID codigo) throws SQLException;
-     boolean Delete(UUID id);
+     Sponsor FindById(int codigo) throws SQLException;
+     boolean Delete(int id);
      boolean Update(Sponsor sponsor);
 }
 

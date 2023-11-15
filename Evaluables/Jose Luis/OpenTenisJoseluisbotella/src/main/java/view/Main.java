@@ -78,8 +78,11 @@ public class Main {
 
     private static void CrearSponsor() throws IOException {
         SponsorControler sponsorControler = new SponsorControler();
-        UUID codigo = UUID.randomUUID();
-        Sponsor s1=new Sponsor(codigo, "Juanjo");
+        System.out.println("Nombre del nuevo Sponsor: ");
+        String nombre=sc.nextLine();
+        System.out.println("Codigo Sponsor: ");
+        int codigo = sc.nextInt();
+        Sponsor s1=new Sponsor(codigo, nombre);
         sponsorControler.CrearSponsor(s1);
     }
 
@@ -102,7 +105,7 @@ public class Main {
         MostrarSponsors();
         System.out.println("Escribeme el nombre del sponsor");
         String nombresponsor=sc.nextLine();
-        UUID id=null;
+        int id = 0;
         List<Sponsor> sponsors = sponsorControler.GetAllSponsors();
 
         if(sponsors != null) {
@@ -128,7 +131,7 @@ public class Main {
         SponsorControler sponsorControler = new SponsorControler();
         System.out.println("Que sponsor quieres borrar");
         String nombresponsor = sc.nextLine();
-        UUID id = null;
+        int id = 0;
         List<Sponsor> sponsors = sponsorControler.GetAllSponsors();
 
         if (sponsors != null) {
@@ -279,11 +282,25 @@ public class Main {
 
     private static void CrearContratoTenista() throws IOException {
         TenistaControler tenistaControler = new TenistaControler();
+        System.out.println("Codigo tenista");
     }
 
     private static void AñadirTorneoGanado() throws IOException {
         TenistaControler tenistaControler = new TenistaControler();
+        System.out.println("Codigo tenista que ha ganado un torneo: ");
+        int codtenista = sc.nextInt();
+        System.out.println("Codigo torneo que ha ganado: ");
+        int codtorneo = sc.nextInt();
+        List<Tenista> sponsors = tenistaControler.GetAllTenistas();
 
+        if (sponsors != null) {
+            for (Tenista teni : sponsors) {
+                if (nombretenista.equals(teni.getNombre())) {
+                    tenista = teni;
+                }
+            }
+
+        }
     }
 
     private static void torneo() throws IOException, SQLException {

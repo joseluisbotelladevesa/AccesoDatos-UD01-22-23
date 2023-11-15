@@ -1,5 +1,6 @@
 package model.services.Tenista;
 
+import model.entity.Contrato;
 import model.entity.Sponsor;
 import model.entity.Tenista;
 import model.repository.Sponsor.ISponsorRepository;
@@ -9,6 +10,7 @@ import model.repository.Tenista.TenistaRepository;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class TenistaService implements ITenistaService{
@@ -35,14 +37,24 @@ public class TenistaService implements ITenistaService{
     @Override
     public boolean Delete(String id) {
        // return ITenistaRepository.Delete(id);
-        return false;
+        return iTenistaRepository.Delete(id);
     }
 
     @Override
     public boolean Update(Tenista tenista) {
 
         //return ITenistaRepository.Update(tenista);
-        return false;
+       return iTenistaRepository.Update(tenista);
+    }
+
+    @Override
+    public boolean AddTorneoGanado(String codTenista, String codTorneo) {
+        return iTenistaRepository.AddTorneoGanado(codTenista, codTorneo);
+    }
+
+    @Override
+    public boolean AddContrato(Contrato contrato) {
+        return iTenistaRepository.AddContrato(contrato);
     }
 }
 

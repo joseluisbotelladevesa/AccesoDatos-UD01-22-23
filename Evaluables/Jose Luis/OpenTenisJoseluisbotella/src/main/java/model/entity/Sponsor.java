@@ -1,24 +1,22 @@
 package model.entity;
 
-import java.util.UUID;
-
 public class Sponsor {
 
-    private UUID codigo;
+    private int codigo;
     private String nombre;
 
 
-    public Sponsor(UUID codigo, String nombre) {
+    public Sponsor(int codigo, String nombre) {
         this.codigo = codigo;
         this.nombre = nombre;
     }
 
-    public UUID getCodigo() {
+    public int getCodigo() {
 
         return codigo;
     }
 
-    public void setCodigo(UUID codigo) {
+    public void setCodigo(int codigo) {
 
         this.codigo = codigo;
     }

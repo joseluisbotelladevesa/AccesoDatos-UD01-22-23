@@ -6,6 +6,6 @@ import model.repository.ICrudRepository;
 
 import java.util.UUID;
 
-public interface ISponsorRepository extends ICrudRepository <Sponsor, UUID>{
+public interface ISponsorRepository extends ICrudRepository <Sponsor, Integer>{
 
 }

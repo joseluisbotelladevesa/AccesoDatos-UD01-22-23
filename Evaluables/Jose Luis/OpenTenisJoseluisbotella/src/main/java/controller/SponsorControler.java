@@ -23,7 +23,7 @@ public class SponsorControler {
 
     }
 
-    public Sponsor GetSponsorbyid(UUID id) throws SQLException {
+    public Sponsor GetSponsorbyid(int id) throws SQLException {
         return this.iSponsorService.FindById(id);
     }
 
@@ -36,7 +36,7 @@ public class SponsorControler {
 
         return this.iSponsorService.Update(sponsor);
     }
-    public boolean Delete(UUID id){
+    public boolean Delete(int id){
         return this.iSponsorService.Delete(id);
     }
 }
