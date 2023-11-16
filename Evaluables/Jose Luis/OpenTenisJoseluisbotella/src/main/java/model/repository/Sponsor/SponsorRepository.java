@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
-public class SponsorRepository implements ISponsorRepository{
+public class SponsorRepository implements ISponsorRepository {
     private static final String CONFIG_FILE = "src/main/resources/propiedades.properties";
     private Connection conexion;
-    static Scanner sc= new Scanner(System.in);
+    static Scanner sc = new Scanner(System.in);
     private static String URL;
     private static String USER;
     private static String PASS;
@@ -45,22 +45,22 @@ public class SponsorRepository implements ISponsorRepository{
             // ps.execute();
 
             result = ps.executeUpdate() > 0;
-            if (result){
+            if (result) {
                 System.out.println("Sponsor Creado");
-            }else{
+            } else {
                 System.out.println("Sponsor no creado");
             }
 
         } catch (SQLException e) {
-            System.out.println("Sql error: "+e.getMessage());
-            }
+            System.out.println("Sql error: " + e.getMessage());
+        }
     }
 
     @Override
     public Sponsor FindById(Integer codigo) throws SQLException {
-        Sponsor sponsor=null;
-        try{
-            Properties properties= new Properties();
+        Sponsor sponsor = null;
+        try {
+            Properties properties = new Properties();
             properties.load(new FileReader(CONFIG_FILE));
 
             String query = "select * from sponsor where codigo = ?";
@@ -69,23 +69,22 @@ public class SponsorRepository implements ISponsorRepository{
                     properties.getProperty("USER"), properties.getProperty("PASS"));
 
 
-            PreparedStatement ps =conexion.prepareStatement(query);
+            PreparedStatement ps = conexion.prepareStatement(query);
             ps.setInt(1, codigo);    //no se si esta bien preguntar en clase a dani guapo
 
 
+            ResultSet resultado = ps.executeQuery();
 
-            ResultSet resultado=ps.executeQuery();
-
-            while ((resultado.next())){
-                sponsor=new Sponsor( resultado.getInt("codigo"),
+            while ((resultado.next())) {
+                sponsor = new Sponsor(resultado.getInt("codigo"),
                         resultado.getString("nombre"));
             }
 
             conexion.close();
-        }catch (SQLException s) {
+        } catch (SQLException s) {
             System.out.println("Error sql: " + s.getMessage());
             return sponsor;
-        }catch (Exception e) {
+        } catch (Exception e) {
             return sponsor;
 
         }
@@ -94,29 +93,29 @@ public class SponsorRepository implements ISponsorRepository{
 
     @Override
     public List<Sponsor> FindAll() throws SQLException {
-        List<Sponsor>sponsors = null;
+        List<Sponsor> sponsors = null;
         try {
-            sponsors=new ArrayList<>();
+            sponsors = new ArrayList<>();
             var properties = new Properties();
             properties.load(new FileReader(CONFIG_FILE));
 
-            String query= "select * from sponsor";
+            String query = "select * from sponsor";
 
             conexion = DriverManager.getConnection(properties.getProperty("URL"),
                     properties.getProperty("USER"), properties.getProperty("PASS"));
 
-            PreparedStatement ps =conexion.prepareStatement(query);
-            ResultSet resultado=ps.executeQuery();
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ResultSet resultado = ps.executeQuery();
 
-            while (resultado.next()){
-                sponsors.add(new Sponsor( resultado.getInt("codigo"),
+            while (resultado.next()) {
+                sponsors.add(new Sponsor(resultado.getInt("codigo"),
                         resultado.getString("nombre")));
             }
             conexion.close();
 
         } catch (SQLException ex) {
-            System.out.println("error: "+ex.getMessage());
-        }catch (Exception ex) {
+            System.out.println("error: " + ex.getMessage());
+        } catch (Exception ex) {
             System.out.println("no va");
         }
 
@@ -126,7 +125,7 @@ public class SponsorRepository implements ISponsorRepository{
     @Override
     public boolean Delete(Integer id) {
         boolean result = false;
-        try(Connection conexion = DriverManager.getConnection(URL, USER, PASS)){
+        try (Connection conexion = DriverManager.getConnection(URL, USER, PASS)) {
 
             String query = "delete from sponsor where codigo = ?;";
 
@@ -135,7 +134,7 @@ public class SponsorRepository implements ISponsorRepository{
 
             result = ps.executeUpdate() > 0;
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Error en borrado del sponsor" + ex.getMessage());
         }
         return result;
@@ -144,7 +143,7 @@ public class SponsorRepository implements ISponsorRepository{
     @Override
     public boolean Update(Sponsor sponsor) {
         boolean result = false;
-        try{
+        try {
 
             conexion = DriverManager.getConnection(URL, USER, PASS);
 
@@ -156,12 +155,48 @@ public class SponsorRepository implements ISponsorRepository{
 
             result = ps.executeUpdate() > 0;
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Error en update sponsor: " + ex.getMessage());
         }
         return result;
     }
 
 
+    @Override
+    public List<Sponsor> GetSponsorMoreRich() {
+        List<Sponsor> sponsors = null;
+        try {
+            sponsors = new ArrayList<>();
+            var properties = new Properties();
+            properties.load(new FileReader(CONFIG_FILE));
+
+            String query = "select * from sponsor s WHERE EXISTS (" +
+                    "    SELECT 1" +
+                    "    FROM contrato c" +
+                    "    WHERE c.codSponsor = s.codigo" +
+                    "    GROUP BY c.codSponsor" +
+                    "    HAVING SUM(c.saldo) > 1000000" +
+                    ")";
+
+            conexion = DriverManager.getConnection(properties.getProperty("URL"),
+                    properties.getProperty("USER"), properties.getProperty("PASS"));
+
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ResultSet resultado = ps.executeQuery();
+
+            while (resultado.next()) {
+                sponsors.add(new Sponsor(resultado.getInt("codigo"),
+                        resultado.getString("nombre")));
+            }
+            conexion.close();
+
+        } catch (SQLException ex) {
+            System.out.println("error: " + ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println("no va");
+        }
+
+        return sponsors;
+    }
 }
 

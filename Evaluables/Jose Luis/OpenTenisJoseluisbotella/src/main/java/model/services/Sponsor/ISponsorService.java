@@ -13,5 +13,7 @@ public interface ISponsorService {
      Sponsor FindById(int codigo) throws SQLException;
      boolean Delete(int id);
      boolean Update(Sponsor sponsor);
+
+    List<Sponsor> GetSponsorMoreRich();
 }
 

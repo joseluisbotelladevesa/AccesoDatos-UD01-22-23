@@ -55,10 +55,9 @@ public class TorneoRepository implements ITorneoRepository{
             result = ps.executeUpdate() > 0;
 
             if (result) {
-                ResultSet keys = ps.getGeneratedKeys();
-                keys.next();
-                idTenista = keys.getInt(1);
-
+                System.out.println("Torneo Creado");
+            }else{
+                System.out.println("Torneo no creado");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -72,7 +71,7 @@ public class TorneoRepository implements ITorneoRepository{
             Properties properties = new Properties();
             properties.load(new FileReader(CONFIG_FILE));
 
-            String query = "select * from product where codigo = ?";
+            String query = "select * from torneo where codigo = ?";
 
             conexion = DriverManager.getConnection(properties.getProperty("URL"),
                     properties.getProperty("USER"), properties.getProperty("PASS"));
@@ -140,7 +139,7 @@ public class TorneoRepository implements ITorneoRepository{
         boolean result = false;
         try(Connection conexion = DriverManager.getConnection(URL, USER, PASS)){
 
-            String query = "delete from product where codigo = ?;";
+            String query = "delete from torneo where codigo = ?;";
 
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setString(1, id);
@@ -160,7 +159,7 @@ public class TorneoRepository implements ITorneoRepository{
 
             conexion = DriverManager.getConnection(URL, USER, PASS);
 
-            String query = "update product set reference = ?, price = ?, category = ?, name = ?  where id = ?;";
+            String query = "update torneo set codigo = ?, nombre = ?, puntos = ?, premio = ?;";
 
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setObject(1, torneo.getCodigo());

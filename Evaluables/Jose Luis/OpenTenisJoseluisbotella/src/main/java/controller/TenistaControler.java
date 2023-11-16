@@ -6,6 +6,7 @@ import model.entity.Tenista;
 import model.services.Tenista.ITenistaService;
 import model.services.Tenista.TenistaService;
 
+import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -47,8 +48,18 @@ public class TenistaControler {
         return this.iTenistaService.AddTorneoGanado(codTenista, codTorneo);
     }
 
-    public boolean AddContrato(String codSponsor, String codTenista, LocalDate
-            fechaInicio, LocalDate fechaFin, double saldo) {
+    public boolean AddContrato(String codSponsor, String codTenista, LocalDate fechaInicio, LocalDate fechaFin, double saldo) {
         return this.iTenistaService.AddContrato(codSponsor, codTenista, fechaInicio, fechaFin, saldo);
     }
+
+    public int GetPointsByTenista(String codTenista) {
+        return iTenistaService.GetPointsByTenista(codTenista);
+    }
+
+
+    public List<Entity> GetTenistaWithSponsor() {
+        return iTenistaService.GetTenistaWithSponsor();
+
+    }
+
 }

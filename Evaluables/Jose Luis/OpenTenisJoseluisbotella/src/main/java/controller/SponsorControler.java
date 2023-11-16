@@ -39,4 +39,8 @@ public class SponsorControler {
     public boolean Delete(int id){
         return this.iSponsorService.Delete(id);
     }
+
+    public List<Sponsor>GetSponsorMoreRich(){
+        return this.iSponsorService.GetSponsorMoreRich();
+    }
 }

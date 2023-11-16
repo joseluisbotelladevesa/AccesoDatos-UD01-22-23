@@ -3,6 +3,7 @@ package model.services.Tenista;
 import model.entity.Contrato;
 import model.entity.Tenista;
 
+import javax.swing.text.html.parser.Entity;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,5 +18,7 @@ public interface ITenistaService {
 
     boolean AddContrato(String codSponsor, String codTenista, LocalDate
             fechaInicio, LocalDate fechaFin, double saldo);
+    int GetPointsByTenista(String codTenista);
+    List<Entity> GetTenistaWithSponsor();
 }
 

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public interface IContratoRepository {
-    public void addContrato(Contrato contrato);
+    public boolean addContrato(String codSponsor, String codTenista, LocalDate
+            fechaInicio, LocalDate fechaFin, double saldo);
 
 }

@@ -3,12 +3,14 @@ package model.services.Tenista;
 import model.entity.Contrato;
 import model.entity.Sponsor;
 import model.entity.Tenista;
+import model.repository.Contrato.ContratoRepository;
 import model.repository.Contrato.IContratoRepository;
 import model.repository.Sponsor.ISponsorRepository;
 import model.repository.Sponsor.SponsorRepository;
 import model.repository.Tenista.ITenistaRepository;
 import model.repository.Tenista.TenistaRepository;
 
+import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -19,7 +21,10 @@ public class TenistaService implements ITenistaService{
     private ITenistaRepository iTenistaRepository;
     private IContratoRepository iContratoRepository;
     public TenistaService() throws IOException {
-        iTenistaRepository=new TenistaRepository();}
+        iTenistaRepository=new TenistaRepository();
+        iContratoRepository=new ContratoRepository();
+    }
+
 
     @Override
     public List<Tenista> FindAll() throws SQLException {
@@ -56,14 +61,21 @@ public class TenistaService implements ITenistaService{
     }
 
     @Override
-    public boolean AddContrato(String codSponsor, String codTenista, LocalDate
-            fechaInicio, LocalDate fechaFin, double saldo) {
-        UUID codigo=UUID.randomUUID();
-        Contrato contrato=new Contrato(codigo, fechaInicio, fechaFin, saldo,Integer.parseInt( codSponsor));
-        iContratoRepository.addContrato(contrato);
+    public boolean AddContrato(String codSponsor, String codTenista, LocalDate fechaInicio, LocalDate fechaFin, double saldo) {
+      boolean adsf=false;
+       adsf = iContratoRepository.addContrato(codSponsor, codTenista, fechaInicio, fechaFin, saldo);
+       return adsf;
+    }
 
-        return iTenistaRepository.AddContrato( codSponsor,  codTenista,
-                fechaInicio,  fechaFin,  saldo);
+    @Override
+    public int GetPointsByTenista(String codTenista) {
+        return iTenistaRepository.GetPointsByTenista(codTenista);
+    }
+
+    @Override
+    public List<Entity> GetTenistaWithSponsor() {
+        return iTenistaRepository.GetTenistaWithSponsor();
+
     }
 }
 

@@ -38,6 +38,11 @@ public class SponsorService implements ISponsorService{
     public boolean Update(Sponsor sponsor) {
         return iSponsorRepository.Update(sponsor);
     }
+
+    @Override
+    public List<Sponsor> GetSponsorMoreRich() {
+        return iSponsorRepository.GetSponsorMoreRich();
+    }
 }
 
 

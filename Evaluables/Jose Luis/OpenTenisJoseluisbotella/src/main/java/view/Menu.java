@@ -33,6 +33,7 @@ public class Menu {
         System.out.println(" 3. Encontrar Sponsor");
         System.out.println(" 4. Borrar Sponsor");
         System.out.println(" 5. Modificar Sponsor");
+        System.out.println(" 6. Mostrar Sponsors Ricos");
         System.out.println(" 0. FIN");
     }
     public void mostrarTenista() {
@@ -43,6 +44,8 @@ public class Menu {
         System.out.println(" 5. Modificar Tenista");
         System.out.println(" 6. Crear Contrato asociado a un tenista");
         System.out.println(" 7. Añadir Torneo Ganado");
+        System.out.println(" 8. Puntos Ganados por Tenista");
+        System.out.println(" 9. Nombre de todos los tenista junto al nombre de los Sponsor con contrato");
         System.out.println(" 0. FIN");
     }public void mostrarTorneo() {
         System.out.println(" 1. Nuevo Torneo");
@@ -58,7 +61,7 @@ public class Menu {
         do {
             System.out.print("Introduzca opción: ");
             opcion = sc.nextInt();
-        } while (opcion < 0 || opcion > 5);
+        } while (opcion < 0 || opcion > 6);
         sc.nextLine(); //limpiar el intro
         return opcion;
     }
@@ -67,7 +70,7 @@ public class Menu {
         do {
             System.out.print("Introduzca opción: ");
             opcion = sc.nextInt();
-        } while (opcion < 0 || opcion > 7);
+        } while (opcion < 0 || opcion > 9);
         sc.nextLine(); //limpiar el intro
         return opcion;
     }

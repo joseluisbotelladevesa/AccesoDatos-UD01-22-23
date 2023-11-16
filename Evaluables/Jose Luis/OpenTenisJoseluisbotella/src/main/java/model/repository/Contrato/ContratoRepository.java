@@ -31,23 +31,25 @@ public class ContratoRepository implements IContratoRepository {
 
 
     @Override
-    public void addContrato(Contrato contrato) {
+    public boolean addContrato(String codSponsor, String codTenista, LocalDate
+            fechaInicio, LocalDate fechaFin, double saldo) {
         try {
             boolean result = false;
 
 
             conexion = DriverManager.getConnection(this.URL, this.USER, this.PASS);
-
             String query = "insert into contrato(codigo, fechaInicio, fechaFin, saldo, codSponsor) values(?, ?, ?, ?, ?);";
 
-
+            UUID codContrato=UUID.randomUUID();
             PreparedStatement ps = conexion.prepareStatement(query);
 
-            ps.setObject(1, contrato.getCodigo());
-            ps.setDate(2, Date.valueOf(contrato.getFechaInicio()));
-            ps.setString(3, String.valueOf(contrato.getFechaFin()));
-            ps.setDouble(4, contrato.getSaldo());
-            ps.setInt(2, contrato.getCodSponsor());
+            ps.setObject(1, codContrato);
+            ps.setDate(2, Date.valueOf(fechaInicio));
+            ps.setString(3, String.valueOf(fechaFin));
+            ps.setDouble(4, saldo);
+            ps.setInt(5, Integer.parseInt(codSponsor));
+
+
 
             // El primero devuelve true o false, el segundo cuantas cosas ha insertado
             // ps.execute();
@@ -55,6 +57,23 @@ public class ContratoRepository implements IContratoRepository {
             result = ps.executeUpdate() > 0;
             if (result){
                 System.out.println("Contrato Creado");
+
+                String query2 = "insert into tenistaContrato(codTenista, codContrato) values (?, ?)";
+
+                PreparedStatement ps2 = conexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+
+                ps2.setObject(1, UUID.fromString(codTenista));
+                ps2.setObject(2, codContrato);
+
+
+                result = ps.executeUpdate() > 0;
+                if (result){
+                    System.out.println("Contrato con el tenista Creado");
+                }else{
+                    System.out.println("Contrato con el tenista no creado");
+                }
+
             }else{
                 System.out.println("Contrato no creado");
             }
@@ -62,5 +81,6 @@ public class ContratoRepository implements IContratoRepository {
         } catch (SQLException e) {
             System.out.println("Sql error: "+e.getMessage());
         }
+        return false;
     }
 }

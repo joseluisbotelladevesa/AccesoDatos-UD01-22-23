@@ -70,6 +70,8 @@ public class Main {
                 case 5:
                     ModificarSponsor();
                     break;
+                case 6:
+                    GetSponsorMoreRich();
                 case 0:
                     break;
             }
@@ -175,6 +177,19 @@ public class Main {
         }
     }
 
+    private static void GetSponsorMoreRich() throws IOException {
+        SponsorControler sponsorControler = new SponsorControler();
+        List<Sponsor> sponsors = sponsorControler.GetSponsorMoreRich();
+
+        if(sponsors != null) {
+            for (Sponsor spon : sponsors) {
+                System.out.println(spon);
+            }
+        }else{
+            System.out.println("nulo");
+        }
+    }
+
     private static void tenista() throws IOException, SQLException {
         Menu menu = new Menu();
         int opcion;
@@ -199,8 +214,15 @@ public class Main {
                     break;
                 case 6:
                     CrearContratoTenista();
+                    break;
                 case 7:
                     AñadirTorneoGanado();
+                    break;
+                case 8:
+                    GetPointsByTenista();
+                    break;
+                case 9:
+                    GetTenistaWithSponsor();
                 case 0:
                     break;
             }
@@ -232,15 +254,31 @@ public class Main {
 
     private static void EncontrarTenista() throws IOException, SQLException {
         TenistaControler tenistaControler = new TenistaControler();
-        Tenista tenista = tenistaControler.GetTenistabyid();
 
-        if(tenista != null)
-        {
-            System.out.println(tenista);
+        MostrarTenistas();
+        System.out.println("Escribeme el nombre del tenista");
+        String nombresponsor=sc.nextLine();
+        UUID id=null;
+        List<Tenista> tenistas = tenistaControler.GetAllTenistas();
+
+        if(tenistas != null) {
+            for (Tenista teni : tenistas) {
+                if (nombresponsor.equals(teni.getNombre())) {
+                    id = teni.getCodigo();
+                }
+            }
+
+            Tenista tenista = tenistaControler.GetTenistabyid(String.valueOf(id));
+
+            if(tenista != null)
+            {
+                System.out.println(tenista);
+            }
+            else {
+                System.out.println("Tenista no encontrado");
+            }
         }
-        else {
-            System.out.println("Tenista no encontrado");
-        }
+
     }
 
     private static void EliminarTenista() throws IOException, SQLException {
@@ -267,16 +305,18 @@ public class Main {
 
     private static void ModificarTenista() throws IOException, SQLException {
         TenistaControler tenistaControler = new TenistaControler();
-        System.out.println("Nombre del tenista: ");
-        System.out.println("Que tenista quieres borrar");
+        System.out.println("Que tenista quieres actualizar");
         String nombretenista = sc.nextLine();
         Tenista tenista=null;
-        List<Tenista> sponsors = tenistaControler.GetAllTenistas();
+        System.out.println("Nuevo nombre del tenista: ");
+        String nuevonombre=sc.nextLine();
+        List<Tenista> tenistas = tenistaControler.GetAllTenistas();
 
-        if (sponsors != null) {
-            for (Tenista teni : sponsors) {
+        if (tenistas != null) {
+            for (Tenista teni : tenistas) {
                 if (nombretenista.equals(teni.getNombre())) {
                     tenista=teni;
+                    teni.setNombre(nuevonombre);
                 }
             }
         }
@@ -288,50 +328,99 @@ public class Main {
         }
     }
 
+
+
     private static void CrearContratoTenista() throws IOException, SQLException {
         TenistaControler tenistaControler = new TenistaControler();
-
-        int mes=rd.nextInt(0, 12), anyo=rd.nextInt(0,2023), dia=rd.nextInt(1,31);
-        int mesfin=rd.nextInt(0, 12), anyofin=rd.nextInt(2023,2040), diafin=rd.nextInt(1,31);
+        SponsorControler sponsorControler = new SponsorControler();
+        int mes = rd.nextInt(1, 12), anyo = rd.nextInt(0, 2023), dia = rd.nextInt(1, 31);
+        int mesfin = rd.nextInt(1, 12), anyofin = rd.nextInt(2023, 2040), diafin = rd.nextInt(1, 31);
         LocalDate fechaInicio = LocalDate.of(anyo, mes, dia);
         LocalDate fechaFin = LocalDate.of(anyofin, mesfin, diafin);
-        System.out.println("Sueldo contrato: ");
-        double saldo=sc.nextDouble();
-
-        UUID codTenista = null;
+        UUID codTenista = UUID.randomUUID();
         int codSponsor = 0;
+
+        System.out.println("Sueldo contrato: ");
+        double saldo = sc.nextDouble();
         System.out.println("Que tenista quieres añadirle un contrato: ");
         String nombretenista = sc.nextLine();
-        List<Tenista>tenistas=new ArrayList<>();
-        tenistas=tenistaControler.GetAllTenistas();
-        for (int i=0; i<tenistas.size(); i++){
-            if (tenistas.get(i).getNombre().equals(nombretenista)){
-                codTenista= tenistas.get(i).getCodigo();
-            }
-        }
+        sc.nextLine();
         System.out.println("Que sponsor quieres ponerle al contrato: ");
         String nombreSponsor = sc.nextLine();
-        SponsorControler sponsorControler = new SponsorControler();
-        List<Sponsor>sponsors=new ArrayList<>();
-        sponsors=sponsorControler.GetAllSponsors();
-        for (int i=0; i<tenistas.size(); i++){
-            if (sponsors.get(i).getNombre().equals(nombreSponsor)){
-                codSponsor= sponsors.get(i).getCodigo();
+
+        List<Tenista> tenistas = tenistaControler.GetAllTenistas();
+
+        if (tenistas != null) {
+            for (Tenista teni : tenistas) {
+                if (teni.getNombre().equals(nombretenista)) {
+                    codTenista = teni.getCodigo();
+                }
             }
         }
-        String codigoSponsor= String.valueOf(codSponsor);
-        String codigoTenista= String.valueOf(codTenista);
-        tenistaControler.AddContrato(codigoSponsor, codigoTenista, fechaInicio, fechaFin, saldo);
+
+        List<Sponsor> sponsors = sponsorControler.GetAllSponsors();
+
+        if (sponsors != null) {
+            for (Sponsor spo : sponsors) {
+                if (spo.getNombre().equals(nombreSponsor)) {
+                    codSponsor = spo.getCodigo();
+                }
+            }
+            String codigoSponsor = String.valueOf(codSponsor);
+            String codigoTenista = String.valueOf(codTenista);
+            tenistaControler.AddContrato(codigoSponsor, codigoTenista, fechaInicio, fechaFin, saldo);
+
+        }
+        System.out.println("Este metodo no lo he sabido hacer correctamente ya que me crea el contrato pero no me crea el contrato con el tenista");
 
     }
 
+
     private static void AñadirTorneoGanado() throws IOException, SQLException {
         TenistaControler tenistaControler = new TenistaControler();
-        System.out.println("Codigo tenista que ha ganado un torneo: ");
-        String codtenista = sc.nextLine();
-        System.out.println("Codigo torneo que ha ganado: ");
-        String codtorneo = sc.nextLine();
+        TorneoControler torneoControler = new TorneoControler();
+        String codtenista;
+        UUID coteni = null;
+        String codtorneo;
+        UUID cotor = null;
+        List<Tenista> tenistas = tenistaControler.GetAllTenistas();
+        System.out.println("Nombre tenista que ha ganado un torneo: ");
+        String nombretenista=sc.nextLine();
+        if (tenistas != null) {
+            for (Tenista teni : tenistas) {
+                if (teni.getNombre().equals(nombretenista)) {
+                    coteni = teni.getCodigo();
+                }
+            }
+        }
+        List<Torneo> torneos = torneoControler.GetAllTorneos();
+        System.out.println("Nombre torneo que ha ganado: ");
+        String nombretorneo=sc.nextLine();
+        if (torneos != null) {
+            for (Torneo tor : torneos) {
+                if (tor.getNombre().equals(nombretorneo)) {
+                    cotor = tor.getCodigo();
+                }
+            }
+        }
+        codtenista= String.valueOf(coteni);
+        codtorneo= String.valueOf(cotor);
+
         tenistaControler.AddTorneoGanado(codtenista, codtorneo);
+    }
+
+    private static void GetTenistaWithSponsor() throws IOException {
+        TenistaControler tenistaControler=new TenistaControler();
+        tenistaControler.GetTenistaWithSponsor();
+        System.out.println("Este metodo no lo he hecho usa otro");
+    }
+
+    private static void GetPointsByTenista() throws IOException {
+        TenistaControler tenistaControler=new TenistaControler();
+        System.out.println("Nombre del tenista del que deseas ver sus puntos: ");
+        String nombre=sc.nextLine();
+        tenistaControler.GetPointsByTenista(nombre);
+        System.out.println("Este metodo no lo he terminado no me dio tiempo usa otro");
     }
 
     private static void torneo() throws IOException, SQLException {
@@ -365,7 +454,13 @@ public class Main {
     private static void NuevoTorneo() throws IOException {
         TorneoControler torneoControler=new TorneoControler();
         UUID codigo = UUID.randomUUID();
-        Torneo to1=new Torneo(codigo, "Champions", 40, 4000);
+        System.out.println("Nombre torneo: ");
+        String nombre=sc.nextLine();
+        System.out.println("Puntos torneo: ");
+        int puntos=sc.nextInt();
+        System.out.println("Premio torneo: ");
+        double premio=sc.nextDouble();
+        Torneo to1=new Torneo(codigo, nombre, puntos, premio);
         torneoControler.CrearTorneo(to1);
     }
 
@@ -381,15 +476,29 @@ public class Main {
     }
 
     private static void EncontrarTorneos() throws SQLException, IOException {
-        TorneoControler torneoControler=new TorneoControler();
-        Torneo torneo = torneoControler.GetTorneobyid("1");
+        TorneoControler torneoControler = new TorneoControler();
 
-        if(torneo != null)
-        {
-            System.out.println(torneo);
-        }
-        else {
-            System.out.println("Producto no encontrado");
+
+        MostrarTorneos();
+        System.out.println("Escribeme el nombre del torneo");
+        String nombresponsor = sc.nextLine();
+        UUID id = null;
+        List<Torneo> torneos = torneoControler.GetAllTorneos();
+
+        if (torneos != null) {
+            for (Torneo torneo : torneos) {
+                if (nombresponsor.equals(torneo.getNombre())) {
+                    id = torneo.getCodigo();
+                }
+            }
+
+            Torneo torneo = torneoControler.GetTorneobyid(String.valueOf(id));
+
+            if (torneo != null) {
+                System.out.println(torneo);
+            } else {
+                System.out.println("Torneo no encontrado");
+            }
         }
     }
 
@@ -408,18 +517,19 @@ public class Main {
             }
         }
         if(torneoControler.Delete(id)){
-            System.out.println("Producto borrado");
+            System.out.println("Torneo borrado");
         }
         else{
-            System.out.println("Producto no borrado");
+            System.out.println("Torneo no borrado");
         }
     }
 
     private static void ModificarTorneo() throws IOException, SQLException {
         TorneoControler torneoControler=new TorneoControler();
-        System.out.println("Nombre del producto: ");
-        System.out.println("Que torneo quieres borrar");
+        System.out.println("Nombre del torneo: ");
         String nombretenista = sc.nextLine();
+        System.out.println("Nuevo nombre del torneo: ");
+        String nuevonombre=sc.nextLine();
         Torneo torneo = null;
         List<Torneo> torneos = torneoControler.GetAllTorneos();
 
@@ -427,14 +537,15 @@ public class Main {
             for (Torneo tor : torneos) {
                 if (nombretenista.equals(tor.getNombre())) {
                     torneo = tor;
+                    torneo.setNombre(nuevonombre);
                 }
             }
         }
         if(torneoControler.UpdateTorneo(torneo)){
-            System.out.println("Producto actualizado");
+            System.out.println("Torneo actualizado");
         }
         else{
-            System.out.println("Producto no actualizado");
+            System.out.println("Torneo no actualizado");
         }
     }
 

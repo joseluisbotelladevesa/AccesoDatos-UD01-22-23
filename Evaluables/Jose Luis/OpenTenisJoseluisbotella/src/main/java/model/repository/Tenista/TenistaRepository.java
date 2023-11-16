@@ -3,6 +3,8 @@ package model.repository.Tenista;
 import model.entity.Contrato;
 import model.entity.Tenista;
 
+import javax.swing.text.html.parser.Entity;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
@@ -53,11 +55,15 @@ public class TenistaRepository implements ITenistaRepository {
             result = ps.executeUpdate() > 0;
 
             if (result) {
-                ResultSet keys = ps.getGeneratedKeys();
-                keys.next();
-                idTenista = keys.getInt(1);
-
+                System.out.println("Tenista Creado");
+            }else{
+                System.out.println("Tenista no creado");
             }
+           //     ResultSet keys = ps.getGeneratedKeys();
+             //   keys.next();
+               // idTenista = keys.getInt(1);
+
+            //}
 }
         catch(SQLException sqle){
                 System.out.println("Error sql: " + sqle.getMessage());
@@ -159,7 +165,7 @@ public class TenistaRepository implements ITenistaRepository {
 
             conexion = DriverManager.getConnection(URL, USER, PASS);
 
-            String query = "update tenista set codigo = ?, nombre = ?, nacionalidad = ? where codigo = ?;";
+            String query = "update tenista set codigo = ?, nombre = ?, nacionalidad = ?;";
 
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setObject(1, tenista.getCodigo());
@@ -178,12 +184,13 @@ public class TenistaRepository implements ITenistaRepository {
     public boolean AddTorneoGanado(String codTenista, String codTorneo) {
         boolean result = false;
         try(Connection conexion = DriverManager.getConnection(URL, USER, PASS)){
-
-            String query = "insert into tenistaGanado(codTenista, codTorneo) values(?, ?);";
+            UUID codigoTenista= UUID.fromString(codTenista);
+            UUID codigoTorneo= UUID.fromString(codTorneo);
+            String query = "insert into torneoGanado(codTenista, codTorneo) values(?, ?);";
 
             PreparedStatement ps = conexion.prepareStatement(query);
-            ps.setString(1,codTenista);
-            ps.setString(2,codTorneo);
+            ps.setObject(1,codigoTenista);
+            ps.setObject(2,codigoTorneo);
 
             result = ps.executeUpdate() > 0;
 
@@ -193,37 +200,83 @@ public class TenistaRepository implements ITenistaRepository {
         return result;
     }
 
-    @Override
-    public boolean AddContrato(String codSponsor, String codTenista, LocalDate
-            fechaInicio, LocalDate fechaFin, double saldo) {
+    /*@Override
+    public boolean AddContrato(String codTenista, String codContrato) {
         boolean result=false;
 
         try {
 
             conexion = DriverManager.getConnection(URL, USER, PASS);
 
-            String query = "select * from contrato;";
-            int codigoSponsor = Integer.parseInt(codSponsor);
-            PreparedStatement ps = conexion.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Contrato contrato = new Contrato(
-                        (UUID) rs.getObject("codigo"),
-                        rs.getDate("fechaInicio").toLocalDate(),
-                        rs.getDate("fechaFin").toLocalDate(),
-                        rs.getDouble("saldo"),
-                        rs.getInt("codSponsor"));
-                if (codigoSponsor == contrato.getCodSponsor() && fechaInicio == contrato.getFechaInicio()
-                        && fechaFin == contrato.getFechaFin() && saldo == contrato.getSaldo()) {
 
-                }
+            String query = "insert into tenistaContrato(codTenista, codContrato) values (?, ?)";
+
+            PreparedStatement ps = conexion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+
+            ps.setObject(1,UUID.fromString(codTenista));
+            ps.setObject(2,UUID.fromString( codContrato));
+
+
+            result = ps.executeUpdate() > 0;
+            if (result){
+                System.out.println("Contrato con el tenista Creado");
+            }else{
+                System.out.println("Contrato con el tenista no creado");
             }
-           result=true;
+
 
         } catch (Exception ex) {
-            System.out.println("Error en update tenista: " + ex.getMessage());
+            System.out.println("Error en crear contrato tenista: " + ex.getMessage());
         }
         return result;
+    }*/
+
+    @Override
+    public int GetPointsByTenista(String codTenista) {
+        int puntos;
+        List<Tenista> tenista = null;
+        try {
+            tenista = new ArrayList<>();
+            var properties = new Properties();
+            properties.load(new FileReader(CONFIG_FILE));
+
+            String query= "DELIMITER //" +
+                    "CREATE FUNCTION GetPointsByTenista(codTenista VARCHAR(100)) RETURNS INT" +
+                    "BEGIN" +
+                    "    DECLARE totalPoints INT;" +
+                    "    SELECT SUM(puntos) INTO totalPoints FROM torneo puntos;" +
+                    "    IF totalPoints IS NULL THEN" +
+                    "        SET totalPoints = 0;" +
+                    "    END IF;" +
+                    "    RETURN totalPoints;" +
+                    "END //" +
+                    "DELIMITER ;";
+
+            conexion = DriverManager.getConnection(properties.getProperty("URL"),
+                    properties.getProperty("USER"), properties.getProperty("PASS"));
+
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ResultSet resultado = ps.executeQuery(query);
+
+            puntos=resultado.getInt("puntos");
+
+            conexion.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return puntos;
+    }
+
+    @Override
+    public List<Entity> GetTenistaWithSponsor() {
+        return null;
     }
 
 }
